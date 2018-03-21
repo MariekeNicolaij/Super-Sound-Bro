@@ -5,95 +5,72 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    public GameObject laserObject;         // It points to cursor / right-joystick
-    Image laserImage;
-    Color defaultLaserColor;
-    float laserDelay;
-    float maxLaserDelay = 1;
+    public Animator animator;
+    public Rigidbody2D rBody;
+    [Range(0, 10)]
+    public float moveSpeed = 10;
+    [Range(0, 5)]
+    public float holdSpeed = 5;
+    float speed;
 
+    bool isHolding;
 
     void Start()
     {
-        if (!laserObject)
-            laserObject = GameObject.FindGameObjectWithTag("Laser");
-        laserImage = laserObject.GetComponentInChildren<Image>();
-        defaultLaserColor = laserImage.color;
+        speed = moveSpeed;
     }
 
     void Update()
     {
-        LaserToCursor();
-        Inputs();
+        InputCheck();
     }
 
-    void LaserToCursor()
+    void OnCollisionEnter2D(Collision2D other)
     {
-        Vector2 mouse = Input.mousePosition;
-        laserObject.transform.rotation = Quaternion.Euler(0, 0, Mathf.Atan2(mouse.y - transform.position.y, mouse.x - transform.position.x) * Mathf.Rad2Deg - 90);
+        Debug.Log("pensi");
+        animator.SetBool("Ground", true);
     }
 
-    void Inputs()
+    void InputCheck()
     {
-        if (Input.GetButtonDown("Fire"))
-
-            Debug.Log(CanFire());
-        if (CanFire() && Input.GetButtonDown("Fire"))
-            Fire();
+        if (Input.GetAxis("Horizontal") != 0)
+            Move();
+        if (Input.GetButtonDown("Jump"))
+            Jump();
+        if (Input.GetButtonDown("Hold"))
+            Hold();
     }
 
-    bool CanFire()
+    void Move()
     {
-        if (laserDelay > 0)
-        {
-            laserDelay -= Time.deltaTime;
-            return false;
-        }
-        else
-        {
-            ResetLaserColor();
-            return true;
-        }
+        float h = Input.GetAxis("Horizontal");
+
+        Debug.Log("Fix flip");
+        transform.localScale = (h < 0) ? -Vector2.one : Vector2.one;
+
+        animator.SetFloat("Speed", Mathf.Abs(h));
+        transform.Translate(Vector2.right * h / speed);
     }
 
-    void ResetLaserColor()
+    bool CanJump()
     {
-        laserImage.color = defaultLaserColor;
+        Debug.Log("fix 0punt");
+        return (rBody.velocity.y > 0) ? false : true;
     }
 
-    void Fire()
+    void Jump()
     {
-        Color newTempColor;
-        laserDelay = maxLaserDelay;
-
-        if (HitSoundObject())
-        {
-            newTempColor = Color.green;
-            //add score depending how accurate shooting was
-        }
-        else
-            newTempColor = Color.red;
-        newTempColor.a = defaultLaserColor.a;
-        laserImage.color = newTempColor;
+        // cannot jump again
+        if(CanJump())
+        rBody.AddForce(Vector2.up * 1000);
+        animator.SetFloat("vSpeed", rBody.velocity.y);
     }
 
-    bool HitSoundObject()
+    void Hold()
     {
-        Debug.Log("This does not work");
-        Collider2D laserCollider = laserImage.GetComponent<Collider2D>();
+        isHolding = !isHolding;
+        animator.SetBool("Crouch", isHolding);
 
-        foreach (GameObject go in AudioManager.instance.soundList)
-        {
-            Debug.Log(laserCollider.bounds);
-            Collider2D goCollider = go.GetComponent<Collider2D>();
-            Debug.Log(goCollider.bounds);
-            if (laserCollider.bounds.Intersects(goCollider.bounds))
-                return true;
-        }
-        return false;
-    }
-
-    Vector3 CursorDirection()
-    {
-        return Vector3.zero;
+        speed = (isHolding) ? holdSpeed : moveSpeed;
     }
 }
