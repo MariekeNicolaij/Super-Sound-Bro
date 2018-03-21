@@ -7,28 +7,39 @@ public class Player : MonoBehaviour
 {
     public Animator animator;
     public Rigidbody2D rBody;
-    [Range(0, 10)]
-    public float moveSpeed = 10;
+
+    [Range(100, 1000)]
+    public float jumpForce = 750;
+    [Range(100, 1000)]
+    public float moveForce = 7.5f;
     [Range(0, 5)]
     public float holdSpeed = 5;
     float speed;
+    float maxHorizontallyVelocity = 5;
+
+    Vector2 startPosition;
+    float defaultScale;
 
     bool isHolding;
 
+
     void Start()
     {
-        speed = moveSpeed;
+        speed = moveForce;
+        defaultScale = transform.localScale.x;
+        startPosition = transform.position;
     }
 
     void Update()
     {
         InputCheck();
+        Animations();
+        FallCheck();
     }
 
     void OnCollisionEnter2D(Collision2D other)
     {
-        Debug.Log("pensi");
-        animator.SetBool("Ground", true);
+        animator.SetBool("CanJump", true);
     }
 
     void InputCheck()
@@ -37,40 +48,55 @@ public class Player : MonoBehaviour
             Move();
         if (Input.GetButtonDown("Jump"))
             Jump();
-        if (Input.GetButtonDown("Hold"))
-            Hold();
+        if (Input.GetButton("Hold"))
+            Hold(true);
+        else if (Input.GetButtonUp("Hold"))
+            Hold(false);
+    }
+
+    void Animations()
+    {
+        if (rBody.velocity.y > 0)
+            animator.SetFloat("vSpeed", rBody.velocity.y);
+        if (Input.GetAxis("Horizontal") != 0)
+            animator.SetFloat("Speed", Mathf.Abs(Input.GetAxis("Horizontal")));
+        else
+            animator.SetFloat("Speed", 0);
+    }
+
+    void FallCheck()
+    {
+        if (transform.position.y < -100)
+            transform.position = startPosition;
     }
 
     void Move()
     {
         float h = Input.GetAxis("Horizontal");
 
-        Debug.Log("Fix flip");
-        transform.localScale = (h < 0) ? -Vector2.one : Vector2.one;
-
-        animator.SetFloat("Speed", Mathf.Abs(h));
-        transform.Translate(Vector2.right * h / speed);
+        transform.localScale = (h < 0) ? new Vector2(-defaultScale, defaultScale) : new Vector2(defaultScale, defaultScale);
+       
+        if (rBody.velocity.x <= maxHorizontallyVelocity && rBody.velocity.x >= -maxHorizontallyVelocity)
+            rBody.AddForce(Vector2.right * h * speed);
     }
 
     bool CanJump()
     {
-        Debug.Log("fix 0punt");
-        return (rBody.velocity.y > 0) ? false : true;
+        return (rBody.velocity.y <= 0 && animator.GetBool("CanJump")) ? true : false;
     }
 
     void Jump()
     {
-        // cannot jump again
-        if(CanJump())
-        rBody.AddForce(Vector2.up * 1000);
-        animator.SetFloat("vSpeed", rBody.velocity.y);
+        if (CanJump())
+            rBody.AddForce(Vector2.up * jumpForce);
+        animator.SetBool("CanJump", false);
     }
 
-    void Hold()
+    void Hold(bool hold)
     {
-        isHolding = !isHolding;
-        animator.SetBool("Crouch", isHolding);
+        isHolding = hold;
+        animator.SetBool("Crouch", hold);
 
-        speed = (isHolding) ? holdSpeed : moveSpeed;
+        speed = (isHolding) ? holdSpeed : moveForce;
     }
 }
