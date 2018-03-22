@@ -7,10 +7,10 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    public GameObject levelCompletePanel;
+    public GameObject levelCompletePanel, gameOverPanel;
 
 
-    void Start()
+    void Awake()
     {
         instance = this;
     }
@@ -18,6 +18,11 @@ public class UIManager : MonoBehaviour
     public void ShowLevelCompletePanel()
     {
         levelCompletePanel.SetActive(true);
+    }
+
+    public void ShowGameOverPanel()
+    {
+        gameOverPanel.SetActive(true);
     }
 
     public void RestartLevel()

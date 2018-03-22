@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
         speed = moveForce;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
+        AudioManager.instance.PlayMusic(MusicType.Game);
     }
 
     void Update()
@@ -40,6 +41,12 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         animator.SetBool("CanJump", true);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Finish")
+            LevelComplete();
     }
 
     void InputCheck()
@@ -66,7 +73,7 @@ public class Player : MonoBehaviour
 
     void FallCheck()
     {
-        if (transform.position.y < -100)
+        if (transform.position.y < -50)
             transform.position = startPosition;
     }
 
@@ -75,7 +82,7 @@ public class Player : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
 
         transform.localScale = (h < 0) ? new Vector2(-defaultScale, defaultScale) : new Vector2(defaultScale, defaultScale);
-       
+
         if (rBody.velocity.x <= maxHorizontallyVelocity && rBody.velocity.x >= -maxHorizontallyVelocity)
             rBody.AddForce(Vector2.right * h * speed);
     }
@@ -98,5 +105,17 @@ public class Player : MonoBehaviour
         animator.SetBool("Crouch", hold);
 
         speed = (isHolding) ? holdSpeed : moveForce;
+    }
+
+    public void GameOver()
+    {
+        Time.timeScale = 0;
+        UIManager.instance.ShowGameOverPanel();
+    }
+
+    void LevelComplete()
+    {
+        Time.timeScale = 0;
+        UIManager.instance.ShowLevelCompletePanel();
     }
 }
