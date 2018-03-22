@@ -32,7 +32,7 @@ public class Player : MonoBehaviour
         speed = moveSpeed;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
-        //AudioManager.instance.PlayMusic(MusicType.Game);
+        AudioManager.instance.PlayMusic(MusicType.Game);
     }
 
     void Update()
