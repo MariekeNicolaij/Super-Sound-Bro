@@ -2,22 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoundSystem : MonoBehaviour
+public class SoundParticleSystem : MonoBehaviour
 {
     ParticleSystem soundSystem;
     ParticleSystem.MainModule mainSystem;
+
+    float plugInLifeTime = 1;
+    float plugOutLifeTime = 6;
 
     void Start()
     {
         soundSystem = GetComponent<ParticleSystem>();
         mainSystem = soundSystem.main;
     }
-
+    
     void OnParticleCollision(GameObject other)
     {
-        Debug.Log(other);
-        if (other.transform.tag == "Player")
+        if (other.tag == "Player")
             GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().GameOver();
+    }
 
+    public void ChangeLifeTime(bool plugIn)
+    {
+        mainSystem.startLifetime = (plugIn) ? plugInLifeTime : plugOutLifeTime;
     }
 }

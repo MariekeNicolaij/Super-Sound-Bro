@@ -8,27 +8,31 @@ public class Player : MonoBehaviour
     public Animator animator;
     public Rigidbody2D rBody;
 
-    [Range(100, 1000)]
-    public float jumpForce = 750;
-    [Range(100, 1000)]
-    public float moveForce = 7.5f;
+    GameObject currentPlug;
+
+    [Range(100, 2000)]
+    public float jumpForce = 1000;
+    [Range(0, 10)]
+    public float moveSpeed = 5;
     [Range(0, 5)]
-    public float holdSpeed = 5;
+    public float holdSpeed = 2.5f;
     float speed;
     float maxHorizontallyVelocity = 5;
 
     Vector2 startPosition;
     float defaultScale;
 
-    bool isHolding;
+    public bool isHolding;
+    bool canHold;
+    bool facingRight = true;
 
 
     void Start()
     {
-        speed = moveForce;
+        speed = moveSpeed;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
-        AudioManager.instance.PlayMusic(MusicType.Game);
+        //AudioManager.instance.PlayMusic(MusicType.Game);
     }
 
     void Update()
@@ -45,8 +49,26 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (other.tag == "Plug")
+        {
+            if (!isHolding)
+            {
+                canHold = true;
+                currentPlug = other.gameObject;
+            }
+        }
         if (other.tag == "Finish")
             LevelComplete();
+    }
+
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "Plug")
+        {
+            canHold = false;
+            Hold(false);
+            currentPlug = null;
+        }
     }
 
     void InputCheck()
@@ -55,36 +77,48 @@ public class Player : MonoBehaviour
             Move();
         if (Input.GetButtonDown("Jump"))
             Jump();
-        if (Input.GetButton("Hold"))
+        if (Input.GetButtonDown("Hold"))
             Hold(true);
-        else if (Input.GetButtonUp("Hold"))
+        if (Input.GetButtonUp("Hold"))
             Hold(false);
     }
 
     void Animations()
     {
-        if (rBody.velocity.y > 0)
-            animator.SetFloat("vSpeed", rBody.velocity.y);
-        if (Input.GetAxis("Horizontal") != 0)
-            animator.SetFloat("Speed", Mathf.Abs(Input.GetAxis("Horizontal")));
-        else
-            animator.SetFloat("Speed", 0);
+        animator.SetFloat("vSpeed", rBody.velocity.y);
+        animator.SetFloat("Speed", Mathf.Abs(Input.GetAxis("Horizontal")));
     }
 
     void FallCheck()
     {
         if (transform.position.y < -50)
+        {
             transform.position = startPosition;
+            rBody.velocity = Vector2.zero;
+        }
     }
 
     void Move()
     {
         float h = Input.GetAxis("Horizontal");
 
-        transform.localScale = (h < 0) ? new Vector2(-defaultScale, defaultScale) : new Vector2(defaultScale, defaultScale);
+        if (!isHolding)
+        {
+            if (h > 0 && !facingRight)
+                Flip();
+            else if (h < 0 && facingRight)
+                Flip();
+        }
+        rBody.velocity = new Vector2(h * speed, rBody.velocity.y);
+    }
 
-        if (rBody.velocity.x <= maxHorizontallyVelocity && rBody.velocity.x >= -maxHorizontallyVelocity)
-            rBody.AddForce(Vector2.right * h * speed);
+    void Flip()
+    {
+        facingRight = !facingRight;
+
+        Vector3 newScale = transform.localScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
     }
 
     bool CanJump()
@@ -99,12 +133,21 @@ public class Player : MonoBehaviour
         animator.SetBool("CanJump", false);
     }
 
-    void Hold(bool hold)
+    public void Hold(bool hold)
     {
-        isHolding = hold;
-        animator.SetBool("Crouch", hold);
+        if (!canHold && hold)
+            return;
 
-        speed = (isHolding) ? holdSpeed : moveForce;
+        speed = (hold) ? holdSpeed : moveSpeed;
+        animator.SetBool("Hold", hold);
+
+        if (currentPlug)
+        {
+            currentPlug.GetComponent<Rigidbody2D>().isKinematic = (hold) ? true : false;
+            currentPlug.transform.parent = (hold) ? transform : null;
+        }
+
+        isHolding = hold;
     }
 
     public void GameOver()

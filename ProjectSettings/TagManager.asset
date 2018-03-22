@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Plug
   - Sound System
+  - Plug Animation Trigger
+  - Finish Plug
   layers:
   - Default
   - TransparentFX
@@ -15,7 +17,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Player
   - 
   - 
   - 
