@@ -17,7 +17,6 @@ public class Player : MonoBehaviour
     [Range(0, 5)]
     public float holdSpeed = 2.5f;
     float speed;
-    float maxHorizontallyVelocity = 5;
 
     Vector2 startPosition;
     float defaultScale;

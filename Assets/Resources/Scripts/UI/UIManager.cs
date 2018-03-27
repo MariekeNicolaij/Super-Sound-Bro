@@ -9,18 +9,34 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     public Text title;
     public GameObject startPanel, optionsPanel, audioPanel, quitPanel, levelCompletePanel, gameOverPanel;
+    public Slider volumeSlider;
 
 
     void Awake()
     {
         instance = this;
-        if (!GameObject.FindObjectOfType<AudioManager>())
+        if (!FindObjectOfType<AudioManager>())
             gameObject.AddComponent<AudioManager>();
+
+        if (volumeSlider)
+            volumeSlider.onValueChanged.AddListener(OnVolumeSliderChange);
+    }
+
+    void OnVolumeSliderChange(float value)
+    {
+        FindObjectOfType<AudioSource>().volume = value / 100;          // Lelijk
+        volumeSlider.GetComponentInChildren<Text>().text = value + "%";
     }
 
     public void PlayButtonSound()
     {
         AudioManager.instance.PlaySound(SoundType.ButtonClick);
+    }
+
+    public void Play()
+    {
+        SceneManager.LoadScene("Loading");
+        PlayerPrefs.SetString("Scene", "Game");
     }
 
     public void Quit()
@@ -46,7 +62,7 @@ public class UIManager : MonoBehaviour
     {
         audioPanel.SetActive(show);
         if (show)
-            title.text = "Audio";
+            title.text = "Volume";
     }
 
     public void ToggleQuitPanel(bool show)

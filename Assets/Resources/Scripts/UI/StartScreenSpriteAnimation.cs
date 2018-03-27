@@ -24,18 +24,15 @@ public class StartScreenSpriteAnimation : MonoBehaviour
 
     void SpawnSprites()
     {
-        for(int i = 0; i < maxSprites; i++)
+        for (int i = 0; i < maxSprites; i++)
         {
             GameObject go = new GameObject("Sprite is nasty");
             go.AddComponent<SpriteRenderer>().sprite = mainSprite;
             go.AddComponent<Rigidbody2D>().drag = Random.Range(0.5f, 2f);
 
-            go.transform.position = RandomPosition();
-            go.transform.rotation = Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360)));
+            Respawn(go);
             go.transform.parent = transform;
 
-            float randomScale = Random.Range(1, maxSpriteScale);
-            go.transform.localScale = new Vector2(randomScale, randomScale);
 
             sprites.Add(go);
         }
@@ -57,10 +54,23 @@ public class StartScreenSpriteAnimation : MonoBehaviour
     {
         s.GetComponent<Rigidbody2D>().velocity = Vector3.zero;
         s.transform.position = RandomPosition();
+        s.transform.rotation = RandomRotation();
+        float randomScale = RandomScale();
+        s.transform.localScale = new Vector2(randomScale, randomScale);
     }
 
     Vector2 RandomPosition()
     {
         return new Vector2(Random.Range(-minHorizontal, minHorizontal), minVertical);
+    }
+
+    Quaternion RandomRotation()
+    {
+        return Quaternion.Euler(new Vector3(0, 0, Random.Range(0, 360)));
+    }
+
+    float RandomScale()
+    {
+        return Random.Range(1, maxSpriteScale);
     }
 }
