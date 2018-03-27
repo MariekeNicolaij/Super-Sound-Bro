@@ -153,12 +153,12 @@ public class Player : MonoBehaviour
     public void GameOver()
     {
         Time.timeScale = 0;
-        UIManager.instance.ShowGameOverPanel();
+        UIManager.instance.ToggleGameOverPanel(true);
     }
 
     void LevelComplete()
     {
         Time.timeScale = 0;
-        UIManager.instance.ShowLevelCompletePanel();
+        UIManager.instance.ToggleLevelCompletePanel(true);
     }
 }

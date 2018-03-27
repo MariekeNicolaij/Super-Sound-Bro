@@ -7,22 +7,72 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    public GameObject levelCompletePanel, gameOverPanel;
+    public Text title;
+    public GameObject startPanel, optionsPanel, audioPanel, quitPanel, levelCompletePanel, gameOverPanel;
 
 
     void Awake()
     {
         instance = this;
+        if (!GameObject.FindObjectOfType<AudioManager>())
+            gameObject.AddComponent<AudioManager>();
     }
 
-    public void ShowLevelCompletePanel()
+    public void PlayButtonSound()
     {
-        levelCompletePanel.SetActive(true);
+        AudioManager.instance.PlaySound(SoundType.ButtonClick);
     }
 
-    public void ShowGameOverPanel()
+    public void Quit()
     {
-        gameOverPanel.SetActive(true);
+        Application.Quit();
+    }
+
+    public void ToggleStartPanel(bool show)
+    {
+        startPanel.SetActive(show);
+        if (show)
+            title.text = "Super Sound Bro";
+    }
+
+    public void ToggleOptionsPanel(bool show)
+    {
+        optionsPanel.SetActive(show);
+        if (show)
+            title.text = "Options";
+    }
+
+    public void ToggleAudioPanel(bool show)
+    {
+        audioPanel.SetActive(show);
+        if (show)
+            title.text = "Audio";
+    }
+
+    public void ToggleQuitPanel(bool show)
+    {
+        quitPanel.SetActive(show);
+        if (show)
+            title.text = "Are you sure?";
+    }
+
+    public void ToggleLevelCompletePanel(bool show)
+    {
+        levelCompletePanel.SetActive(show);
+    }
+
+    public void ToggleGameOverPanel(bool show)
+    {
+        gameOverPanel.SetActive(show);
+    }
+
+    public void NextLevel()
+    {
+        Time.timeScale = 1;
+
+        Debug.Log("TBC");
+        //SceneManager.LoadScene("Loading");
+        //PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
     }
 
     public void RestartLevel()
