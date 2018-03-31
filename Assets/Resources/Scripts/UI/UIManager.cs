@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
     public Text title;
-    public GameObject startPanel, optionsPanel, audioPanel, quitPanel, levelCompletePanel, gameOverPanel;
+    public GameObject startPanel, optionsPanel, audioPanel, quitPanel, levelCompletePanel, pausePanel, gameOverPanel;
     public Slider volumeSlider;
 
 
@@ -77,6 +77,11 @@ public class UIManager : MonoBehaviour
         levelCompletePanel.SetActive(show);
     }
 
+    public void TogglePausePanel(bool show)
+    {
+        pausePanel.SetActive(show);
+    }
+
     public void ToggleGameOverPanel(bool show)
     {
         gameOverPanel.SetActive(show);
@@ -96,5 +101,12 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
+    }
+
+    public void Menu()
+    {
+        Time.timeScale = 1;
+        SceneManager.LoadScene("Loading");
+        PlayerPrefs.SetString("Scene", "Start");
     }
 }

@@ -42,12 +42,14 @@ public class Plug : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        Debug.Log(other.tag);
         if (other.tag == "Plug Animation Trigger")
             startAnimation = true;
     }
 
     void AnimateToPosition()
     {
+        Debug.Log("Test");
         // Plays animation slowly
         animationTime += Time.deltaTime;
         // Player cannot hold it anymore
@@ -63,6 +65,7 @@ public class Plug : MonoBehaviour
         sps.ChangeLifeTime(true);
         // Player is now unable to pick this plug up
         PlugManager.instance.RemovePlugFromList(this);
+
 
         // Lerps to position
         transform.position = Vector2.Lerp(transform.position, finishPlug.transform.position, Time.deltaTime);

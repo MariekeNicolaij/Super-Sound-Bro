@@ -9,30 +9,30 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1216604480500584}
+  m_RootGameObject: {fileID: 1205968598730666}
   m_IsPrefabParent: 1
---- !u!1 &1216604480500584
+--- !u!1 &1205968598730666
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 5
   m_Component:
-  - component: {fileID: 4700085352037122}
-  - component: {fileID: 114698255630452410}
+  - component: {fileID: 4919931242689054}
+  - component: {fileID: 114669780067313246}
   m_Layer: 0
-  m_Name: AudioManager
+  m_Name: PlugManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4700085352037122
+--- !u!4 &4919931242689054
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1216604480500584}
+  m_GameObject: {fileID: 1205968598730666}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -40,24 +40,16 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114698255630452410
+--- !u!114 &114669780067313246
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1216604480500584}
+  m_GameObject: {fileID: 1205968598730666}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8be9ae11d18008749ad8b542e29830ac, type: 3}
+  m_Script: {fileID: 11500000, guid: d05f246b72aa3224883b04cade0fdbd7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  musicSource: {fileID: 0}
-  sfxSource: {fileID: 0}
-  gameMusic: {fileID: 8300000, guid: d2d88fdab777f024eaa36362c6bd5336, type: 3}
-  menuMusic: {fileID: 0}
-  buttonClickSound: {fileID: 0}
-  pickupSound: {fileID: 0}
-  musicList: []
-  song: {fileID: 0}
-  sfxVolume: 100
-  musicVolume: 100
+  plugs: []
+  finishPlugs: []

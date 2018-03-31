@@ -13,9 +13,9 @@ public class Player : MonoBehaviour
     [Range(100, 2000)]
     public float jumpForce = 1000;
     [Range(0, 10)]
-    public float moveSpeed = 5;
+    public float moveSpeed = 7.5f;
     [Range(0, 5)]
-    public float holdSpeed = 2.5f;
+    public float holdSpeed = 3.75f;
     float speed;
 
     Vector2 startPosition;
@@ -24,6 +24,8 @@ public class Player : MonoBehaviour
     public bool isHolding;
     bool canHold;
     bool facingRight = true;
+
+    bool pause;
 
 
     void Start()
@@ -76,6 +78,8 @@ public class Player : MonoBehaviour
             Move();
         if (Input.GetButtonDown("Jump"))
             Jump();
+        if (Input.GetButtonDown("Pause"))
+            Pause();
         if (Input.GetButtonDown("Hold"))
             Hold(true);
         if (Input.GetButtonUp("Hold"))
@@ -132,6 +136,13 @@ public class Player : MonoBehaviour
         animator.SetBool("CanJump", false);
     }
 
+    void Pause()
+    {
+        pause = !pause;
+        Time.timeScale = System.Convert.ToInt32(!pause);
+        UIManager.instance.TogglePausePanel(pause);
+    }
+
     public void Hold(bool hold)
     {
         if (!canHold && hold)
@@ -142,7 +153,8 @@ public class Player : MonoBehaviour
 
         if (currentPlug)
         {
-            currentPlug.GetComponent<Rigidbody2D>().isKinematic = (hold) ? true : false;
+            if (currentPlug.GetComponent<Rigidbody2D>())
+                currentPlug.GetComponent<Rigidbody2D>().isKinematic = (hold) ? true : false;
             currentPlug.transform.parent = (hold) ? transform : null;
         }
 

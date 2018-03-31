@@ -8,7 +8,7 @@ public class SoundParticleSystem : MonoBehaviour
     ParticleSystem.MainModule mainSystem;
 
     float plugInLifeTime = 1;
-    float plugOutLifeTime = 6;
+    float plugOutLifeTime = 4.5f;
 
     void Start()
     {
