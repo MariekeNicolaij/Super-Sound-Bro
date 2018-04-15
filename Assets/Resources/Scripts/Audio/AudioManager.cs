@@ -25,13 +25,44 @@ public class AudioManager : MonoBehaviour
     public float sfxVolume = 100;
     public float musicVolume = 100;
 
+    bool nextSongTimer = false;
+    float nextSongTime = 0;
+    [Range(0, 5)]
+    public float nextSongDelay = 1.5f;
+
 
     void Awake()
     {
-        instance = this;
+        DontDestroyOnLoad(this);
+
+        if (!instance)
+            instance = this;
+        else
+            Destroy(gameObject);
 
         SetMusicList();
         SetVolume();
+
+
+        PlayRandomMusic();
+        Debug.Log("Play random music");
+
+
+
+
+
+
+
+
+
+
+        musicSource.
+    }
+
+    void Update()
+    {
+        if (nextSongTimer)
+            NextSongTimer();
     }
 
     void SetMusicList()
@@ -41,6 +72,7 @@ public class AudioManager : MonoBehaviour
 
     void SetVolume()
     {
+        Debug.Log(PlayerPrefs.GetFloat("MusicVolume"));
         sfxVolume = PlayerPrefs.GetFloat("SfxVolume", 1);
         musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1);
     }
@@ -85,6 +117,9 @@ public class AudioManager : MonoBehaviour
                 break;
         }
 
+        nextSongTime = song.length + nextSongDelay;
+        nextSongTimer = true;
+
         musicSource.clip = song;
         musicSource.volume = musicVolume;
         musicSource.Play();
@@ -98,12 +133,26 @@ public class AudioManager : MonoBehaviour
         musicSource.Stop();
 
         oldSong = song;
-        while (song == oldSong)
+        if (musicList.Length > 1)
+            while (song == oldSong)
+                song = musicList[UnityEngine.Random.Range(0, musicList.Length)];
+        else
             song = musicList[UnityEngine.Random.Range(0, musicList.Length)];
+
+        nextSongTime = song.length + nextSongDelay;
+        nextSongTimer = true;
 
         musicSource.clip = song;
         musicSource.volume = musicVolume;
         musicSource.Play();
+    }
+
+    void NextSongTimer()
+    {
+        if (nextSongTime > 0)
+            nextSongTime -= Time.deltaTime;
+        else
+            PlayRandomMusic();
     }
 }
 

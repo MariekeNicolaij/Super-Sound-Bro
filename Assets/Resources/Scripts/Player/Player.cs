@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
         speed = moveSpeed;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
-        AudioManager.instance.PlayMusic(MusicType.Game);
+        //AudioManager.instance.PlayMusic(MusicType.Game);
     }
 
     void Update()
@@ -141,6 +141,8 @@ public class Player : MonoBehaviour
         pause = !pause;
         Time.timeScale = System.Convert.ToInt32(!pause);
         UIManager.instance.TogglePausePanel(pause);
+        if (!pause)
+            UIManager.instance.title.text = "";
     }
 
     public void Hold(bool hold)

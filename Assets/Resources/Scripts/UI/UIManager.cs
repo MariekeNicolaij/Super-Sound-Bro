@@ -19,13 +19,21 @@ public class UIManager : MonoBehaviour
             gameObject.AddComponent<AudioManager>();
 
         if (volumeSlider)
+        {
             volumeSlider.onValueChanged.AddListener(OnVolumeSliderChange);
+            volumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1) * 100;
+            volumeSlider.GetComponentInChildren<Text>().text = PlayerPrefs.GetFloat("MusicVolume", 1) * 100 + "%";
+        }
     }
 
     void OnVolumeSliderChange(float value)
     {
-        FindObjectOfType<AudioSource>().volume = value / 100;          // Lelijk
+        float finalV = value / 100;
+
         volumeSlider.GetComponentInChildren<Text>().text = value + "%";
+
+        PlayerPrefs.SetFloat("MusicVolume", finalV);
+        AudioManager.instance.musicSource.volume = finalV;
     }
 
     public void PlayButtonSound()
@@ -75,16 +83,22 @@ public class UIManager : MonoBehaviour
     public void ToggleLevelCompletePanel(bool show)
     {
         levelCompletePanel.SetActive(show);
+        if (show)
+            title.text = "Level Complete!";
     }
 
     public void TogglePausePanel(bool show)
     {
         pausePanel.SetActive(show);
+        if (show)
+            title.text = "Pause";
     }
 
     public void ToggleGameOverPanel(bool show)
     {
         gameOverPanel.SetActive(show);
+        if (show)
+            title.text = (show) ? "Game Over!" : "";
     }
 
     public void NextLevel()
