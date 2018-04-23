@@ -109,6 +109,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
 
         Debug.Log("TBC");
+        //PlayerPrefs.SetInt("LatestUnlockedLevel", number);
         //SceneManager.LoadScene("Loading");
         //PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
     }
