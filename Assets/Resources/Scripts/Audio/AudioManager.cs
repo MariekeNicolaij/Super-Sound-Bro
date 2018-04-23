@@ -61,7 +61,6 @@ public class AudioManager : MonoBehaviour
 
     void SetVolume()
     {
-        Debug.Log(PlayerPrefs.GetFloat("MusicVolume"));
         sfxVolume = PlayerPrefs.GetFloat("SfxVolume", 1);
         musicVolume = PlayerPrefs.GetFloat("MusicVolume", 1);
     }

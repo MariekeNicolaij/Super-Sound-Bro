@@ -10,6 +10,7 @@ public class UIManager : MonoBehaviour
     public Text title;
     public GameObject startPanel, optionsPanel, audioPanel, quitPanel, levelCompletePanel, pausePanel, gameOverPanel;
     public Slider volumeSlider;
+    public Button resetButton;
 
 
     void Awake()
@@ -46,14 +47,7 @@ public class UIManager : MonoBehaviour
     /// </summary>
     public void Play()
     {
-        SceneManager.LoadScene("Loading");
-        PlayerPrefs.SetString("Scene", "Level Selection");
-    }
-
-    public void StartGame()
-    {
-        SceneManager.LoadScene("Loading");
-        PlayerPrefs.SetString("Scene", "Game");
+        SceneManager.LoadScene("Level Selection");
     }
 
     public void Quit()
@@ -124,6 +118,12 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
+    }
+
+    public void Reset()
+    {
+        PlayerPrefs.DeleteAll();
+        resetButton.interactable = false;
     }
 
     public void Menu()
