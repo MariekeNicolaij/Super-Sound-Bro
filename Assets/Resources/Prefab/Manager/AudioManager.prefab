@@ -289,3 +289,4 @@ MonoBehaviour:
   song: {fileID: 0}
   sfxVolume: 100
   musicVolume: 100
+  nextSongDelay: 1.5

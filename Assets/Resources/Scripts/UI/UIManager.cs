@@ -41,7 +41,16 @@ public class UIManager : MonoBehaviour
         AudioManager.instance.PlaySound(SoundType.ButtonClick);
     }
 
+    /// <summary>
+    /// Goes to level selection
+    /// </summary>
     public void Play()
+    {
+        SceneManager.LoadScene("Loading");
+        PlayerPrefs.SetString("Scene", "Level Selection");
+    }
+
+    public void StartGame()
     {
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", "Game");

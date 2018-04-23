@@ -46,17 +46,6 @@ public class AudioManager : MonoBehaviour
 
         PlayRandomMusic();
         Debug.Log("Play random music");
-
-
-
-
-
-
-
-
-
-
-        musicSource.
     }
 
     void Update()
