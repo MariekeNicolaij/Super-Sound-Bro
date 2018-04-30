@@ -42,7 +42,6 @@ public class Plug : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log(other.tag);
         if (other.tag == "Plug Animation Trigger")
             startAnimation = true;
     }

@@ -145,23 +145,61 @@ public class Player : MonoBehaviour
             UIManager.instance.title.text = "";
     }
 
+
+
+
+
+
+
+
+
+
+
+
     public void Hold(bool hold)
     {
-        if (!canHold && hold)
+        if (!canHold && hold && !currentPlug)   // If you are close enough to hold and if you currently are not holding anything then go
             return;
 
-        speed = (hold) ? holdSpeed : moveSpeed;
-        animator.SetBool("Hold", hold);
+        speed = (hold) ? holdSpeed : moveSpeed; // Change player speed
+        animator.SetBool("Hold", hold);         // Change the animation according to when player is holding or not
 
-        if (currentPlug)
+        RaycastHit2D hit;
+        HingeJoint2D hingeJoint2D = new HingeJoint2D();
+
+        if (currentPlug) // Plug is set in Trigger
         {
-            if (currentPlug.GetComponent<Rigidbody2D>())
-                currentPlug.GetComponent<Rigidbody2D>().isKinematic = (hold) ? true : false;
-            currentPlug.transform.parent = (hold) ? transform : null;
+            hit = (facingRight) ? Physics2D.Raycast(transform.position, Vector2.right, Mathf.Infinity) : Physics2D.Raycast(transform.position, Vector2.left, Mathf.Infinity);
+
+            Debug.Log(hit.point);
+
+            if (!currentPlug.GetComponent<HingeJoint2D>())
+                currentPlug.AddComponent<HingeJoint2D>();
+            hingeJoint2D = currentPlug.GetComponent<HingeJoint2D>();
+            hingeJoint2D.connectedBody = rBody;
+            //hingeJoint2D.connectedAnchor = hit.point.normalized;
+
+            //if (currentPlug.GetComponent<Rigidbody2D>())
+            //    currentPlug.GetComponent<Rigidbody2D>().isKinematic = (hold) ? true : false;
+            //currentPlug.transform.parent = (hold) ? transform : null;
         }
+        else if (hingeJoint2D)
+            hingeJoint2D.connectedBody = null;
 
         isHolding = hold;
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public void GameOver()
     {
