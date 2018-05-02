@@ -1,10 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Plug : MonoBehaviour
 {
+    public SpringJoint2D joint2D;
     SoundParticleSystem sps;
+    GameObject imageObject;
+    public Rigidbody2D rBody;
+
+    Player player;
 
     Vector2 startPosition;
     bool startAnimation;
@@ -17,18 +23,36 @@ public class Plug : MonoBehaviour
 
     void Start()
     {
+        rBody = GetComponent<Rigidbody2D>();
+        player = GameObject.FindWithTag("Player").GetComponent<Player>();
+
+        if (!joint2D)
+                joint2D = (!GetComponent<SpringJoint2D>()) ? gameObject.AddComponent<SpringJoint2D>() : GetComponent<SpringJoint2D>();
+        joint2D.connectedBody = player.rBody;
+        joint2D.enabled = false;
+
+        imageObject = GetComponentInChildren<SpriteRenderer>().gameObject;
+
         startPosition = transform.position;
         maxScale = transform.localScale.x;
         minScale = maxScale * scaleMultiplyer;
 
         transform.localScale = new Vector2(minScale, minScale);
+
+        ToggleWalkThroughPlug(false);
     }
 
     void Update()
     {
+        VelocityCheck();
         FallCheck();
         if (startAnimation)
             AnimateToPosition();
+    }
+
+    void VelocityCheck()
+    {
+        //Debug.Log(rBody.velocity);
     }
 
     void FallCheck()
@@ -36,7 +60,7 @@ public class Plug : MonoBehaviour
         if (transform.position.y < -50)
         {
             transform.position = startPosition;
-            GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            rBody.velocity = Vector2.zero;
         }
     }
 
@@ -48,7 +72,6 @@ public class Plug : MonoBehaviour
 
     void AnimateToPosition()
     {
-        Debug.Log("Test");
         // Plays animation slowly
         animationTime += Time.deltaTime;
         // Player cannot hold it anymore
@@ -58,8 +81,11 @@ public class Plug : MonoBehaviour
         // Get its particle system
         sps = finishPlug.GetComponentInChildren<SoundParticleSystem>();
 
+        // Destroy joint because it will not be needed anymore
+        Destroy(joint2D);
         // Destroy rigidbody because it will not be needed anymore
-        Destroy(GetComponent<Rigidbody2D>());
+        Destroy(rBody);
+        
         // Makes the particles life time shorter aka the player cant touch them anymore
         sps.ChangeLifeTime(true);
         // Player is now unable to pick this plug up
@@ -85,5 +111,10 @@ public class Plug : MonoBehaviour
             // Done animating
             startAnimation = false;
         }
+    }
+
+    public void ToggleWalkThroughPlug(bool cannotWalkThroughPlug)
+    {
+        imageObject.layer = (cannotWalkThroughPlug) ? 0 : 9;   // 0 = Default, 9 = Plug
     }
 }
