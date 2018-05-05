@@ -92,6 +92,7 @@ public class UIManager : MonoBehaviour
 
     public void TogglePausePanel(bool show)
     {
+        Cursor.visible = show;
         pausePanel.SetActive(show);
         if (show)
             title.text = "Pause";
@@ -99,6 +100,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleGameOverPanel(bool show)
     {
+        Cursor.visible = show;
         gameOverPanel.SetActive(show);
         if (show)
             title.text = (show) ? "Game Over!" : "";

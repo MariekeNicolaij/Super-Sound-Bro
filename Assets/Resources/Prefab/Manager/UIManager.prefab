@@ -60,3 +60,4 @@ MonoBehaviour:
   pausePanel: {fileID: 0}
   gameOverPanel: {fileID: 0}
   volumeSlider: {fileID: 0}
+  resetButton: {fileID: 0}

@@ -30,7 +30,7 @@ public class Player : MonoBehaviour
     bool canHold;
     bool facingRight = true;
 
-    bool pause;
+    bool pause, gameOver;
 
 
     void Start()
@@ -71,8 +71,8 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (!isHolding)
-            if (other.tag == "Plug")
+        if (other.tag == "Plug")
+            if (!isHolding && currentPlug)
             {
                 canHold = false;
                 currentPlug = null;
@@ -148,6 +148,9 @@ public class Player : MonoBehaviour
 
     void Pause()
     {
+        if (gameOver)
+            return;
+
         pause = !pause;
         Time.timeScale = System.Convert.ToInt32(!pause);
         UIManager.instance.TogglePausePanel(pause);
@@ -172,14 +175,14 @@ public class Player : MonoBehaviour
         {
             aimLineRenderer.enabled = true;
             aimPosRaw = Camera.main.WorldToScreenPoint(transform.position + (Vector3.up * 4)); // 4 = multiplier
-            //currentPlug.ToggleWalkThroughPlug(false);
+            currentPlug.ToggleWalkThroughPlug(true);
             currentPlug.joint2D.enabled = true;
         }
         else     // "Resets plug"
         {
             aimLineRenderer.enabled = false;
-            //currentPlug.ToggleWalkThroughPlug(true);
             currentPlug.joint2D.enabled = false;
+            currentPlug.ToggleWalkThroughPlug(false);
         }
     }
 
@@ -205,12 +208,11 @@ public class Player : MonoBehaviour
 
     void Throw()
     {
-        if (!currentPlug)
+        if (!currentPlug && !isHolding)
             return;
         Hold(false);
 
         currentPlug.rBody.AddForce(ThrowDirection() * ActualThrowForce());
-
         currentPlug = null;
     }
 
@@ -231,6 +233,7 @@ public class Player : MonoBehaviour
 
     public void GameOver()
     {
+        gameOver = true;
         Time.timeScale = 0;
         UIManager.instance.ToggleGameOverPanel(true);
     }

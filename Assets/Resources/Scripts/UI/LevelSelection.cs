@@ -99,6 +99,7 @@ public class LevelSelection : MonoBehaviour
 
     public void StartGame()
     {
+        Cursor.visible = false;
         PlayerPrefs.SetString("Scene", "Level " + currentLevel);
         SceneManager.LoadScene("Loading");
     }
