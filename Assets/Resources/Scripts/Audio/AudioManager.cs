@@ -73,7 +73,7 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(SoundType soundType)
     {
-        AudioClip clip = new AudioClip();
+        AudioClip clip = null;
         switch (soundType)
         {
             case SoundType.ButtonClick:
