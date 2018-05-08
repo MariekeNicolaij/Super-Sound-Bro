@@ -24,6 +24,8 @@ public class LevelSelection : MonoBehaviour
         latestUnlockedLevel = GetLatestUnlockedLevel();
         SetLevelImages();
         LockImagesCheck();
+
+        Debug.Log("Lul: " + PlayerPrefs.GetInt("LatestUnlockedLevel"));
     }
 
     /// <summary>
@@ -38,11 +40,19 @@ public class LevelSelection : MonoBehaviour
         return temp;
     }
 
+    /// <summary>
+    /// Get the amount of levels
+    /// </summary>
+    /// <returns></returns>
     int GetLevelCount()
     {
         return SceneManager.sceneCountInBuildSettings - 3; // 3 = start, loading and level selection scene
     }
 
+    /// <summary>
+    /// Gets the latest unlocked level
+    /// </summary>
+    /// <returns></returns>
     int GetLatestUnlockedLevel()
     {
         return PlayerPrefs.GetInt("LatestUnlockedLevel", 0);

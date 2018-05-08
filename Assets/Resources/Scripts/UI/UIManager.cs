@@ -12,6 +12,8 @@ public class UIManager : MonoBehaviour
     public Slider volumeSlider;
     public Button resetButton;
 
+    int nonLevelSceneCount = 3;
+
 
     void Awake()
     {
@@ -57,6 +59,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleStartPanel(bool show)
     {
+        Cursor.visible = true;
         startPanel.SetActive(show);
         if (show)
             title.text = "Super Sound Bro";
@@ -64,6 +67,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleOptionsPanel(bool show)
     {
+        Cursor.visible = true;
         optionsPanel.SetActive(show);
         if (show)
             title.text = "Options";
@@ -71,6 +75,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleAudioPanel(bool show)
     {
+        Cursor.visible = true;
         audioPanel.SetActive(show);
         if (show)
             title.text = "Volume";
@@ -78,6 +83,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleQuitPanel(bool show)
     {
+        Cursor.visible = true;
         quitPanel.SetActive(show);
         if (show)
             title.text = "Are you sure?";
@@ -85,6 +91,7 @@ public class UIManager : MonoBehaviour
 
     public void ToggleLevelCompletePanel(bool show)
     {
+        Cursor.visible = show;
         levelCompletePanel.SetActive(show);
         if (show)
             title.text = "Level Complete!";
@@ -110,10 +117,37 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        Debug.Log("TBC");
-        //PlayerPrefs.SetInt("LatestUnlockedLevel", number);
-        //SceneManager.LoadScene("Loading");
-        //PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetInt("LatestUnlockedLevel", GetLatestUnlockedLevelIndex());
+        SceneManager.LoadScene("Loading");
+        PlayerPrefs.SetString("Scene", GetNextLevelName());
+        Cursor.visible = false;
+    }
+
+    /// <summary>
+    /// Gets next level if exists
+    /// Also make sure that the levels are set in the right order buildsettings
+    /// </summary>
+    /// <returns></returns>
+    string GetNextLevelName()
+    {
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount;
+        int nextLevelIndex = currentLevelIndex + 1;
+
+        return (nextLevelIndex > SceneManager.sceneCountInBuildSettings) ? "Start" : "Level " + nextLevelIndex;
+    }
+
+    /// Gives the latest unlocked level
+    /// Checks if you play an old level, it doesnt get set back to that level
+    int GetLatestUnlockedLevelIndex()
+    {
+        int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount;
+        int nextLevelIndex = currentLevelIndex + 1;
+        int latestUnlockedLevel = PlayerPrefs.GetInt("LatestUnlockedLevel", 0);
+
+        if (nextLevelIndex > SceneManager.sceneCountInBuildSettings)
+            nextLevelIndex = currentLevelIndex;
+
+        return (nextLevelIndex > latestUnlockedLevel) ? nextLevelIndex : latestUnlockedLevel;
     }
 
     public void RestartLevel()
@@ -121,6 +155,7 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
+        Cursor.visible = false;
     }
 
     public void Reset()
