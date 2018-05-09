@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class Plug : MonoBehaviour
 {
+    public Rigidbody2D rBody;
     public DistanceJoint2D joint2D;
     SoundParticleSystem sps;
     GameObject imageObject;
-    public Rigidbody2D rBody;
+    BoxCollider2D triggerCollider;
 
     Player player;
 
@@ -25,6 +26,7 @@ public class Plug : MonoBehaviour
     {
         rBody = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
+        triggerCollider = GetComponent<BoxCollider2D>();
 
         if (!joint2D)
                 joint2D = (!GetComponent<DistanceJoint2D>()) ? gameObject.AddComponent<DistanceJoint2D>() : GetComponent<DistanceJoint2D>();
@@ -73,16 +75,19 @@ public class Plug : MonoBehaviour
         // Plays animation slowly
         animationTime += Time.deltaTime;
         // Player cannot hold it anymore
-        GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().Hold(false);
+        player.Hold(false);
         // Gets closest finish plug
         GameObject finishPlug = PlugManager.instance.GetClosestFinishPlug(transform.position);
         // Get its particle system
         sps = finishPlug.GetComponentInChildren<SoundParticleSystem>();
 
-        // Destroy joint because it will not be needed anymore
-        Destroy(joint2D);
-        // Destroy rigidbody because it will not be needed anymore
-        Destroy(rBody);
+        // Disables the trigger collider to make sure player cannot interact with it
+        triggerCollider.enabled = false;
+        // Disable joint because it will not be needed anymore
+        joint2D.enabled = false;
+        // Disable rigidbody because it will not be needed anymore and it can animate to its final position properly
+        rBody.isKinematic = true;
+        rBody.Sleep();
         
         // Makes the particles life time shorter aka the player cant touch them anymore
         sps.ChangeLifeTime(true);

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -91,6 +92,8 @@ public class UIManager : MonoBehaviour
 
     public void ToggleLevelCompletePanel(bool show)
     {
+        if (show)
+            EventSystem.current.SetSelectedGameObject(levelCompletePanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         levelCompletePanel.SetActive(show);
         if (show)
@@ -99,6 +102,8 @@ public class UIManager : MonoBehaviour
 
     public void TogglePausePanel(bool show)
     {
+        if (show)
+            EventSystem.current.SetSelectedGameObject(pausePanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         pausePanel.SetActive(show);
         if (show)
@@ -107,6 +112,8 @@ public class UIManager : MonoBehaviour
 
     public void ToggleGameOverPanel(bool show)
     {
+        if (show)
+            EventSystem.current.SetSelectedGameObject(gameOverPanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         gameOverPanel.SetActive(show);
         if (show)

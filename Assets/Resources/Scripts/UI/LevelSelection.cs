@@ -24,8 +24,6 @@ public class LevelSelection : MonoBehaviour
         latestUnlockedLevel = GetLatestUnlockedLevel();
         SetLevelImages();
         LockImagesCheck();
-
-        Debug.Log("Lul: " + PlayerPrefs.GetInt("LatestUnlockedLevel"));
     }
 
     /// <summary>

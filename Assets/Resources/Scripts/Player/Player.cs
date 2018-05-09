@@ -74,6 +74,7 @@ public class Player : MonoBehaviour
         if (other.tag == "Plug")
             if (!isHolding && currentPlug)
             {
+                Hold(false);
                 canHold = false;
                 currentPlug = null;
             }
@@ -146,7 +147,7 @@ public class Player : MonoBehaviour
         animator.SetBool("CanJump", false);
     }
 
-    void Pause()
+    public void Pause()
     {
         if (gameOver)
             return;
@@ -208,7 +209,7 @@ public class Player : MonoBehaviour
 
     void Throw()
     {
-        if (!currentPlug && !isHolding)
+        if (!currentPlug || !isHolding)
             return;
         Hold(false);
 
