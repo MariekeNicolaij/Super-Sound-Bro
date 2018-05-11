@@ -9,6 +9,12 @@ public class AudioManager : MonoBehaviour
     public AudioSource musicSource;
     public AudioSource sfxSource;
 
+    // Muffle
+    public AudioLowPassFilter muffleFilter;
+    [Range(0, 2000)]
+    public float muffleFrequency = 1500;
+    float oldMuffleFrequency;
+
     // Music
     public AudioClip gameMusic;
     public AudioClip menuMusic;
@@ -46,6 +52,13 @@ public class AudioManager : MonoBehaviour
 
         PlayRandomMusic();
         Debug.Log("Play random music");
+
+        oldMuffleFrequency = muffleFilter.cutoffFrequency;
+    }
+
+    public void ResetMuffleFrequency()
+    {
+        muffleFilter.cutoffFrequency = oldMuffleFrequency;
     }
 
     void Update()

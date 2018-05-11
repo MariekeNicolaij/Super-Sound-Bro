@@ -94,7 +94,12 @@ public class Plug : MonoBehaviour
         // Player is now unable to pick this plug up
         PlugManager.instance.RemovePlugFromList(this);
 
+        // Gets the muffle filter and desired frequency
+        AudioLowPassFilter muffleFilter = AudioManager.instance.muffleFilter;
+        float muffleFrequency = AudioManager.instance.muffleFrequency;
 
+        // Lerps audio frequency to a muffled frequency
+        muffleFilter.cutoffFrequency = Mathf.Lerp(muffleFilter.cutoffFrequency, muffleFrequency, Time.deltaTime);
         // Lerps to position
         transform.position = Vector2.Lerp(transform.position, finishPlug.transform.position, Time.deltaTime);
         // Lerps to rotation

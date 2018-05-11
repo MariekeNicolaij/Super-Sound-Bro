@@ -122,6 +122,7 @@ public class UIManager : MonoBehaviour
 
     public void NextLevel()
     {
+        AudioManager.instance.ResetMuffleFrequency();
         Time.timeScale = 1;
 
         PlayerPrefs.SetInt("LatestUnlockedLevel", GetLatestUnlockedLevelIndex());
@@ -159,6 +160,7 @@ public class UIManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        AudioManager.instance.ResetMuffleFrequency();
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", SceneManager.GetActiveScene().name);
@@ -173,6 +175,7 @@ public class UIManager : MonoBehaviour
 
     public void Menu()
     {
+        AudioManager.instance.ResetMuffleFrequency();
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", "Start");
