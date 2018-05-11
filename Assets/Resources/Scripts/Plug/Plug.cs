@@ -123,8 +123,6 @@ public class Plug : MonoBehaviour
 
     public void ToggleWalkThroughPlug(bool canWalkThroughPlug)
     {
-        //imageObject.layer = (canWalkThroughPlug) ? 9 : 0;   // 0 = Default, 9 = Plug
-
         if(!canWalkThroughPlug)
             StartCoroutine(EnableWalkThroughPlugDelay(0.5f));      // Delay
         else

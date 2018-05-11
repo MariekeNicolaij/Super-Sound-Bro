@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     Vector3 aimPosRaw, aimPosWorld;
 
     Plug currentPlug;
+    Weapon currentWeapon;
 
     [Range(10, 100)]
     public float throwForce = 75;
@@ -57,12 +58,17 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Plug")
+        if (!isHolding)
         {
-            if (!isHolding)
+            if (other.tag == "Plug")
             {
                 canHold = true;
                 currentPlug = other.gameObject.GetComponent<Plug>();
+            }
+            if (other.tag == "Weapon")
+            {
+                canHold = true;
+                currentWeapon = other.gameObject.GetComponent<Weapon>();
             }
         }
         if (other.tag == "Finish")
@@ -71,13 +77,21 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (other.tag == "Plug")
-            if (!isHolding && currentPlug)
+        if (!isHolding && currentPlug)
+        {
+            if (other.tag == "Plug")
             {
                 Hold(false);
                 canHold = false;
                 currentPlug = null;
             }
+            if (other.tag == "Weapon")
+            {
+                Hold(false);
+                canHold = false;
+                currentWeapon = null;
+            }
+        }
     }
 
     void InputCheck()
@@ -169,22 +183,31 @@ public class Player : MonoBehaviour
 
         isHolding = hold;
 
-        if (!canHold && !currentPlug)   // If you are close enough to hold and if plug exists (Plug is set in Trigger) then go
+        if (!canHold)   // If you are close enough to hold and if plug and weapon exists (Plug and weapon are set in Trigger) then go
             return;
 
-        if (hold) // If you want to hold it
-        {
-            aimLineRenderer.enabled = true;
+        if (currentPlug)
+            ToggleHoldPlug(hold);
+        else if (currentWeapon)
+            ToggleHoldWeapon(hold);
+    }
+
+    void ToggleHoldPlug(bool hold)
+    {
+        if (hold)
             aimPosRaw = Camera.main.WorldToScreenPoint(transform.position + (Vector3.up * 4)); // 4 = multiplier
-            currentPlug.ToggleWalkThroughPlug(true);
-            currentPlug.joint2D.enabled = true;
-        }
-        else     // "Resets plug"
-        {
-            aimLineRenderer.enabled = false;
-            currentPlug.joint2D.enabled = false;
-            currentPlug.ToggleWalkThroughPlug(false);
-        }
+        aimLineRenderer.enabled = hold;
+        currentPlug.ToggleWalkThroughPlug(hold);
+        currentPlug.joint2D.enabled = hold;
+    }
+
+    void ToggleHoldWeapon(bool hold)
+    {
+        if (hold)
+            aimPosRaw = Camera.main.WorldToScreenPoint(transform.position + (Vector3.up * 4)); // 4 = multiplier
+        aimLineRenderer.enabled = hold;
+        currentWeapon.ToggleWalkThroughWeapon(hold);
+        currentWeapon.joint2D.enabled = hold;
     }
 
     void UpdateAimPosInWorldSpace()
@@ -209,12 +232,20 @@ public class Player : MonoBehaviour
 
     void Throw()
     {
-        if (!currentPlug || !isHolding)
+        if (!isHolding)
             return;
         Hold(false);
 
-        currentPlug.rBody.AddForce(ThrowDirection() * ActualThrowForce());
-        currentPlug = null;
+        if (currentPlug)
+        {
+            currentPlug.rBody.AddForce(ThrowDirection() * ActualThrowForce());
+            currentPlug = null;
+        }
+        else if (currentWeapon)
+        {
+            currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce());
+            currentWeapon = null;
+        }
     }
 
     /// <summary>
@@ -226,6 +257,10 @@ public class Player : MonoBehaviour
         return -(transform.position - aimPosWorld).normalized;
     }
 
+    /// <summary>
+    /// Multiplies specified throwforce with the throw distance (aim line)
+    /// </summary>
+    /// <returns></returns>
     float ActualThrowForce()
     {
         float distance = Vector2.Distance(transform.position, aimPosWorld);
