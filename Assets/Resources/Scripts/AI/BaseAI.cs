@@ -6,6 +6,9 @@ public class BaseAI : MonoBehaviour
     [HideInInspector]
     public StateManager stateManager;       // Handles the states
 
+    [Range(0, 25)]
+    public float speed;
+
 
     void Start()
     {

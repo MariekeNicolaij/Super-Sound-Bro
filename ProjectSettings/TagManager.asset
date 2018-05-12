@@ -8,6 +8,7 @@ TagManager:
   - Sound System
   - Plug Animation Trigger
   - Finish Plug
+  - Weapon
   layers:
   - Default
   - TransparentFX
