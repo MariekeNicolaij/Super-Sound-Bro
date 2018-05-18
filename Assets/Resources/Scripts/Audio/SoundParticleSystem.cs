@@ -8,12 +8,13 @@ public class SoundParticleSystem : MonoBehaviour
     ParticleSystem.MainModule mainSystem;
 
     float plugInLifeTime = 1;
-    float plugOutLifeTime = 4.5f;
+    float plugOutLifeTime = 6f;
 
     void Start()
     {
         soundSystem = GetComponent<ParticleSystem>();
         mainSystem = soundSystem.main;
+        mainSystem.startLifetime = plugOutLifeTime;
     }
     
     void OnParticleCollision(GameObject other)

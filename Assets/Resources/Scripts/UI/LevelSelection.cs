@@ -33,7 +33,7 @@ public class LevelSelection : MonoBehaviour
     List<Sprite> GetLevelSprites()
     {
         List<Sprite> temp = new List<Sprite>();
-        foreach (Sprite s in Resources.LoadAll("Textures/Level Selection", typeof(Sprite)))
+        foreach (Sprite s in Resources.LoadAll("Sprites/Level Selection", typeof(Sprite)))
             temp.Add(s);
         return temp;
     }

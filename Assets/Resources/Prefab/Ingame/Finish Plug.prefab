@@ -39,7 +39,6 @@ GameObject:
   - component: {fileID: 198371273972482446}
   - component: {fileID: 199848993217920662}
   - component: {fileID: 114037003332822168}
-  - component: {fileID: 114381608619247584}
   m_Layer: 0
   m_Name: Sound Particle System
   m_TagString: Untagged
@@ -83,8 +82,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1850628104827362}
   m_LocalRotation: {x: 0, y: 0, z: -0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 3.5, y: -7, z: 0}
-  m_LocalScale: {x: 3.85, y: 3.85, z: 3.85}
+  m_LocalPosition: {x: 9.788, y: -11.4, z: 0}
+  m_LocalScale: {x: 3.85, y: 3.9939415, z: 3.85}
   m_Children:
   - {fileID: 4148375449979376}
   - {fileID: 4277533474996074}
@@ -130,17 +129,6 @@ BoxCollider2D:
   m_Size: {x: 0.6, y: 0.16}
   m_EdgeRadius: 0
 --- !u!114 &114037003332822168
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1814810669617300}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: abc1fff4dca0e24419e2edc919c77fe1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114381608619247584
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -230,7 +218,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 4.5
+      scalar: 6
       minScalar: 5
       maxCurve:
         serializedVersion: 2
