@@ -9,6 +9,7 @@ TagManager:
   - Plug Animation Trigger
   - Finish Plug
   - Weapon
+  - Enemy
   layers:
   - Default
   - TransparentFX

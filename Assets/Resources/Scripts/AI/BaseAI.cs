@@ -6,6 +6,8 @@ public class BaseAI : MonoBehaviour
     [HideInInspector]
     public StateManager stateManager;       // Handles the states
 
+    public ParticleSystem dieParticleSystem;
+
     [Range(0, 25)]
     public float speed;
 
@@ -16,6 +18,9 @@ public class BaseAI : MonoBehaviour
         if (!player)
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
+        if (!dieParticleSystem)
+            dieParticleSystem = GetComponentInChildren<ParticleSystem>();
+
         stateManager = new StateManager(this, new IdleState());     // Handles the states
     }
 
@@ -24,10 +29,15 @@ public class BaseAI : MonoBehaviour
         stateManager.Execute();                          // Update stateManager
     }
 
+    void StartDieAnimation()
+    {
+        Destroy(gameObject);
+    }
+
     void OnCollisionEnter2D(Collision2D other)
     {
         if (other.transform.tag == "Weapon")
-            Debug.Log("Die");
+            stateManager.SwitchState(new DieState());
     }
 
     /// <summary>

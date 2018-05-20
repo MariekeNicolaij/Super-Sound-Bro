@@ -73,6 +73,8 @@ public class Player : MonoBehaviour
         }
         if (other.tag == "Finish")
             LevelComplete();
+        if (other.tag == "Enemy")
+            GameOver();
     }
 
     void OnTriggerExit2D(Collider2D other)
