@@ -18,6 +18,6 @@ public class FollowState : IState
 
     public void Exit(BaseAI owner)
     {
-
+        owner.rBody.velocity = Vector2.zero; // So it doesnt slide
     }
 }

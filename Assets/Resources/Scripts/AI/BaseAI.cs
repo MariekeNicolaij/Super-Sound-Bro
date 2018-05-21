@@ -2,31 +2,61 @@
 
 public class BaseAI : MonoBehaviour
 {
-    public Player player;                // Target to follow/attack/flee
+    public Player player;
+    public Rigidbody2D rBody;
     [HideInInspector]
     public StateManager stateManager;       // Handles the states
 
     public ParticleSystem dieParticleSystem;
 
-    [Range(0, 25)]
+    [Range(0, 10)]
+    public float wanderSpeed = 2.5f, followSpeed = 5;
     public float speed;
+    public bool facingRight = true;
+
+    // State timers
+    float stateTime;
+    float minIdleTime = 1, maxIdleTime = 3, minWanderTime = 2, maxWanderTime = 5;
 
 
     void Start()
     {
-        // If target has not been set then target will be the player by default
+        // If player has not been set it will search for the player
         if (!player)
             player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
+
+        if (!rBody)
+            rBody = GetComponent<Rigidbody2D>();
 
         if (!dieParticleSystem)
             dieParticleSystem = GetComponentInChildren<ParticleSystem>();
 
         stateManager = new StateManager(this, new IdleState());     // Handles the states
+        stateTime = Random.Range(minIdleTime, maxIdleTime);
+            speed = wanderSpeed;
     }
 
     void Update()
     {
         stateManager.Execute();                          // Update stateManager
+        StateTimer();
+    }
+
+    void StateTimer()
+    {
+        if (stateTime > 0)
+            stateTime -= Time.deltaTime;
+        else if (stateManager.currentState is IdleState)
+        {
+            speed = wanderSpeed;
+            stateTime = Random.Range(minWanderTime, maxWanderTime);
+            stateManager.SwitchState(new WanderState());
+        }
+        else if (stateManager.currentState is WanderState)
+        {
+            stateTime = Random.Range(minIdleTime, maxIdleTime);
+            stateManager.SwitchState(new IdleState());
+        }
     }
 
     void StartDieAnimation()
@@ -40,6 +70,15 @@ public class BaseAI : MonoBehaviour
             stateManager.SwitchState(new DieState());
     }
 
+    public void Flip()
+    {
+        facingRight = !facingRight;
+
+        Vector3 newScale = transform.localScale;
+        newScale.x *= -1;
+        transform.localScale = newScale;
+    }
+
     /// <summary>
     /// Either left or right
     /// </summary>
@@ -48,6 +87,8 @@ public class BaseAI : MonoBehaviour
     {
         int chanceFactor = Random.Range(0, 100);
         int chance = 50; // %
+
+        rBody.velocity = Vector2.zero; // So it doesnt slide
 
         return (chanceFactor < chance) ? Vector2.left : Vector2.right;
     }

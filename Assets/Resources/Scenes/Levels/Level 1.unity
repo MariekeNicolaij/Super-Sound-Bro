@@ -18337,6 +18337,16 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 61188729877268370, guid: 19e00c1b9c3531a41b5bd3971414f222,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 91f2a9068b1841449a628d9d7560f1fd, type: 2}
+    - target: {fileID: 114820318778421896, guid: 19e00c1b9c3531a41b5bd3971414f222,
+        type: 2}
+      propertyPath: speed
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 19e00c1b9c3531a41b5bd3971414f222, type: 2}
   m_IsPrefabParent: 0
@@ -53528,6 +53538,16 @@ Prefab:
     - target: {fileID: 1949631440572876, guid: 19e00c1b9c3531a41b5bd3971414f222, type: 2}
       propertyPath: m_Name
       value: Decibell Monster (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 61188729877268370, guid: 19e00c1b9c3531a41b5bd3971414f222,
+        type: 2}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 6200000, guid: 91f2a9068b1841449a628d9d7560f1fd, type: 2}
+    - target: {fileID: 114820318778421896, guid: 19e00c1b9c3531a41b5bd3971414f222,
+        type: 2}
+      propertyPath: speed
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 19e00c1b9c3531a41b5bd3971414f222, type: 2}

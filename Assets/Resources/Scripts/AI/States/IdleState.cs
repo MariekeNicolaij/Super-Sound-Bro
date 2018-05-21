@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class IdleState : IState
 {
+
+
     // Start
     public void Enter(BaseAI owner)
     {
