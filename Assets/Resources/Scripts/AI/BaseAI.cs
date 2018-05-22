@@ -7,6 +7,8 @@ public class BaseAI : MonoBehaviour
     [HideInInspector]
     public StateManager stateManager;       // Handles the states
 
+    public Vector2 direction = Vector2.right;
+
     public ParticleSystem dieParticleSystem;
 
     [Range(0, 10)]
@@ -33,13 +35,14 @@ public class BaseAI : MonoBehaviour
 
         stateManager = new StateManager(this, new IdleState());     // Handles the states
         stateTime = Random.Range(minIdleTime, maxIdleTime);
-            speed = wanderSpeed;
+        speed = wanderSpeed;
     }
 
     void Update()
     {
         stateManager.Execute();                          // Update stateManager
         StateTimer();
+        WallCheck();
     }
 
     void StateTimer()
@@ -68,6 +71,17 @@ public class BaseAI : MonoBehaviour
     {
         if (other.transform.tag == "Weapon")
             stateManager.SwitchState(new DieState());
+        if(other.transform.tag == "Obstacle")
+        {
+            Debug.Log("Hit");
+            Flip();
+            direction = OppositeDirection();
+        }
+    }
+
+    void WallCheck()
+    {
+
     }
 
     public void Flip()
@@ -75,7 +89,7 @@ public class BaseAI : MonoBehaviour
         facingRight = !facingRight;
 
         Vector3 newScale = transform.localScale;
-        newScale.x *= -1;
+        newScale.x *= -1;                           // Flips scale
         transform.localScale = newScale;
     }
 
@@ -90,6 +104,15 @@ public class BaseAI : MonoBehaviour
 
         rBody.velocity = Vector2.zero; // So it doesnt slide
 
-        return (chanceFactor < chance) ? Vector2.left : Vector2.right;
+        return (chanceFactor < chance) ? Vector2.right : Vector2.left;
+    }
+
+    /// <summary>
+    /// Used when hitting a wall or structure to change its direction
+    /// </summary>
+    /// <returns></returns>
+    Vector2 OppositeDirection()
+    {
+        return (direction == Vector2.right) ? Vector2.left : Vector2.right;
     }
 }
