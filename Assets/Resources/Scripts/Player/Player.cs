@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
     Plug currentPlug;
     Weapon currentWeapon;
 
-    [Range(100, 1000)]
-    public float throwForce = 750;
+    [Range(10, 100)]
+    public float throwForce = 75;
     [Range(100, 2000)]
     public float jumpForce = 1000;
     [Range(0, 10)]
