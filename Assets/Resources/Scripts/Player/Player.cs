@@ -280,5 +280,6 @@ public class Player : MonoBehaviour
     {
         Time.timeScale = 0;
         UIManager.instance.ToggleLevelCompletePanel(true);
+        AudioManager.instance.PlaySound(SoundType.Victory);
     }
 }
