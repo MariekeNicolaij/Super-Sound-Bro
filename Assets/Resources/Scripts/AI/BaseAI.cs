@@ -12,13 +12,12 @@ public class BaseAI : MonoBehaviour
     public ParticleSystem dieParticleSystem;
 
     [Range(0, 10)]
-    public float wanderSpeed = 2.5f, followSpeed = 5;
-    public float speed;
+    public float speed = 3;
     public bool facingRight = true;
 
     // State timers
     float stateTime;
-    float minIdleTime = 1, maxIdleTime = 3, minWanderTime = 2, maxWanderTime = 5;
+    float minIdleTime = 1, maxIdleTime = 3, minWanderTime = 4, maxWanderTime = 8;
 
 
     void Start()
@@ -35,7 +34,6 @@ public class BaseAI : MonoBehaviour
 
         stateManager = new StateManager(this, new IdleState());     // Handles the states
         stateTime = Random.Range(minIdleTime, maxIdleTime);
-        speed = wanderSpeed;
     }
 
     void Update()
@@ -51,7 +49,6 @@ public class BaseAI : MonoBehaviour
             stateTime -= Time.deltaTime;
         else if (stateManager.currentState is IdleState)
         {
-            speed = wanderSpeed;
             stateTime = Random.Range(minWanderTime, maxWanderTime);
             stateManager.SwitchState(new WanderState());
         }
