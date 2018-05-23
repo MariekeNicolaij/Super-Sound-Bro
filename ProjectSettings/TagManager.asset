@@ -10,6 +10,7 @@ TagManager:
   - Finish Plug
   - Weapon
   - Enemy
+  - Obstacle
   layers:
   - Default
   - TransparentFX

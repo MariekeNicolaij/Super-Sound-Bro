@@ -22,18 +22,8 @@ public class AudioManager : MonoBehaviour
     // Sfx
     public AudioClip buttonClickSound;
     public AudioClip pickupSound;
-<<<<<<< HEAD
-=======
     public AudioClip deathSound;
-<<<<<<< HEAD
-<<<<<<< HEAD
     public AudioClip victorySound;
->>>>>>> parent of 59f4302... Revert "Added victory sound"
-=======
->>>>>>> parent of 91cea2e... Added victory sound
-=======
-    public AudioClip victorySound;
->>>>>>> parent of 59f4302... Revert "Added victory sound"
 
     public AudioClip[] musicList;
     AudioClip oldSong;
@@ -107,24 +97,12 @@ public class AudioManager : MonoBehaviour
             case SoundType.Pickup:
                 clip = pickupSound;
                 break;
-<<<<<<< HEAD
-=======
             case SoundType.Death:
                 clip = deathSound;
                 break;
-<<<<<<< HEAD
-<<<<<<< HEAD
             case SoundType.Victory:
                 clip = victorySound;
                 break;
->>>>>>> parent of 59f4302... Revert "Added victory sound"
-=======
->>>>>>> parent of 91cea2e... Added victory sound
-=======
-            case SoundType.Victory:
-                clip = victorySound;
-                break;
->>>>>>> parent of 59f4302... Revert "Added victory sound"
         }
 
         sfxSource.clip = clip;
@@ -190,26 +168,13 @@ public class AudioManager : MonoBehaviour
 public enum MusicType
 {
     Menu,
-    Game
+    Game,
 }
 
 public enum SoundType
 {
     ButtonClick,
-<<<<<<< HEAD
-    Pickup
-=======
     Pickup,
-<<<<<<< HEAD
-<<<<<<< HEAD
     Death,
     Victory
->>>>>>> parent of 59f4302... Revert "Added victory sound"
-=======
-    Death
->>>>>>> parent of 91cea2e... Added victory sound
-=======
-    Death,
-    Victory
->>>>>>> parent of 59f4302... Revert "Added victory sound"
 }

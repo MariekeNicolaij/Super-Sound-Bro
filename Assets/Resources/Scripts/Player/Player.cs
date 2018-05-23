@@ -13,8 +13,8 @@ public class Player : MonoBehaviour
     Plug currentPlug;
     Weapon currentWeapon;
 
-    [Range(10, 100)]
-    public float throwForce = 75;
+    [Range(100, 1000)]
+    public float throwForce = 750;
     [Range(100, 2000)]
     public float jumpForce = 1000;
     [Range(0, 10)]
@@ -274,6 +274,7 @@ public class Player : MonoBehaviour
         gameOver = true;
         Time.timeScale = 0;
         UIManager.instance.ToggleGameOverPanel(true);
+        AudioManager.instance.PlaySound(SoundType.Death);
     }
 
     void LevelComplete()
