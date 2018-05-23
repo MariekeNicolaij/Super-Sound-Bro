@@ -25,8 +25,11 @@ public class AudioManager : MonoBehaviour
 <<<<<<< HEAD
 =======
     public AudioClip deathSound;
+<<<<<<< HEAD
     public AudioClip victorySound;
 >>>>>>> parent of 59f4302... Revert "Added victory sound"
+=======
+>>>>>>> parent of 91cea2e... Added victory sound
 
     public AudioClip[] musicList;
     AudioClip oldSong;
@@ -105,10 +108,13 @@ public class AudioManager : MonoBehaviour
             case SoundType.Death:
                 clip = deathSound;
                 break;
+<<<<<<< HEAD
             case SoundType.Victory:
                 clip = victorySound;
                 break;
 >>>>>>> parent of 59f4302... Revert "Added victory sound"
+=======
+>>>>>>> parent of 91cea2e... Added victory sound
         }
 
         sfxSource.clip = clip;
@@ -184,7 +190,11 @@ public enum SoundType
     Pickup
 =======
     Pickup,
+<<<<<<< HEAD
     Death,
     Victory
 >>>>>>> parent of 59f4302... Revert "Added victory sound"
+=======
+    Death
+>>>>>>> parent of 91cea2e... Added victory sound
 }
