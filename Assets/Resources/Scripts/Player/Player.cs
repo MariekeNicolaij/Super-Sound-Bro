@@ -274,7 +274,6 @@ public class Player : MonoBehaviour
         gameOver = true;
         Time.timeScale = 0;
         UIManager.instance.ToggleGameOverPanel(true);
-        AudioManager.instance.PlaySound(SoundType.Death);
     }
 
     void LevelComplete()

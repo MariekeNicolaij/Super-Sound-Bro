@@ -2,6 +2,7 @@
 
 public class WanderState : IState
 {
+    Vector2 direction = Vector2.right;
     float turnTime;
     float minTurnTime = 1.5f, maxTurnTime = 3;
 
@@ -18,11 +19,11 @@ public class WanderState : IState
 
     void Move(BaseAI owner)
     {
-        if (owner.direction == Vector2.right && !owner.facingRight)
+        if (direction == Vector2.right && !owner.facingRight)
             owner.Flip();
-        else if (owner.direction == Vector2.left && owner.facingRight)
+        else if (direction == Vector2.left && owner.facingRight)
             owner.Flip();
-        owner.rBody.velocity = new Vector2(owner.speed, owner.rBody.velocity.y) * owner.direction.x; // Move in the right direction
+        owner.rBody.velocity = new Vector2(owner.speed, owner.rBody.velocity.y) * direction.x;
     }
 
     void TurnTimer(BaseAI owner)
@@ -31,7 +32,7 @@ public class WanderState : IState
             turnTime -= Time.deltaTime;
         else
         {
-            owner.direction = owner.RandomDirection();
+            direction = owner.RandomDirection();
             turnTime = Random.Range(minTurnTime, maxTurnTime);
         }
     }

@@ -22,7 +22,6 @@ public class AudioManager : MonoBehaviour
     // Sfx
     public AudioClip buttonClickSound;
     public AudioClip pickupSound;
-    public AudioClip deathSound;
 
     public AudioClip[] musicList;
     AudioClip oldSong;
@@ -96,9 +95,6 @@ public class AudioManager : MonoBehaviour
             case SoundType.Pickup:
                 clip = pickupSound;
                 break;
-            case SoundType.Death:
-                clip = deathSound;
-                break;
         }
 
         sfxSource.clip = clip;
@@ -164,12 +160,11 @@ public class AudioManager : MonoBehaviour
 public enum MusicType
 {
     Menu,
-    Game,
+    Game
 }
 
 public enum SoundType
 {
     ButtonClick,
-    Pickup,
-    Death
+    Pickup
 }
