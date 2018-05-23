@@ -317,6 +317,11 @@ MonoBehaviour:
   menuMusic: {fileID: 0}
   buttonClickSound: {fileID: 8300000, guid: 9ec01534a13d97447b53cb925d9ecc48, type: 3}
   pickupSound: {fileID: 0}
+<<<<<<< HEAD
+=======
+  deathSound: {fileID: 8300000, guid: 086500bdaf128de488d0eb1a39c9c1e6, type: 3}
+  victorySound: {fileID: 8300000, guid: 55580ee2abd463c469529718ef94dbdb, type: 3}
+>>>>>>> parent of 59f4302... Revert "Added victory sound"
   musicList: []
   song: {fileID: 0}
   sfxVolume: 100
