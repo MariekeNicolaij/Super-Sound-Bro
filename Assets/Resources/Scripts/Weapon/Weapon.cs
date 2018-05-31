@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Weapon : MonoBehaviour
 {
+    public Animator animator;
     public Rigidbody2D rBody;
     public DistanceJoint2D joint2D;
     GameObject imageObject;
@@ -11,9 +12,14 @@ public class Weapon : MonoBehaviour
     Player player;
     Vector2 startPosition;
 
+    public bool lerpToPlayer;
+    [Range(1, 5)]
+    public float boomerngSpeed = 2.5f;
+
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         rBody = GetComponent<Rigidbody2D>();
         player = GameObject.FindWithTag("Player").GetComponent<Player>();
 
@@ -28,6 +34,8 @@ public class Weapon : MonoBehaviour
     void Update()
     {
         FallCheck();
+        if (lerpToPlayer)
+            LerpBackToPlayer();
     }
 
     void FallCheck()
@@ -37,6 +45,20 @@ public class Weapon : MonoBehaviour
             transform.position = startPosition;
             rBody.velocity = Vector2.zero;
         }
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            rBody.gravityScale = 1;
+            lerpToPlayer = false;
+        }
+    }
+
+    public void LerpBackToPlayer()
+    {
+        transform.position = Vector2.Lerp(transform.position, player.transform.position, Time.deltaTime * boomerngSpeed);
     }
 
     public void ToggleWalkThroughWeapon(bool canWalkThroughWeapon)

@@ -246,8 +246,17 @@ public class Player : MonoBehaviour
         else if (currentWeapon)
         {
             currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce());
-            currentWeapon = null;
+            StartCoroutine(WeaponLerpDelay(1));
         }
+    }
+
+    IEnumerator WeaponLerpDelay(float delayInSeconds)
+    {
+        yield return new WaitForSeconds(delayInSeconds);
+        currentWeapon.lerpToPlayer = true;
+        currentWeapon.rBody.gravityScale = 0;
+        currentWeapon.rBody.velocity = Vector2.zero;
+        currentWeapon = null;
     }
 
     /// <summary>
