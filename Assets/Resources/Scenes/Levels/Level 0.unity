@@ -63878,11 +63878,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4748772085461996, guid: 48ed9728f5ff19e45bd9504dce177832, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -20.45
+      value: -20.18
       objectReference: {fileID: 0}
     - target: {fileID: 4748772085461996, guid: 48ed9728f5ff19e45bd9504dce177832, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -7.5
+      value: -7.27
       objectReference: {fileID: 0}
     - target: {fileID: 4748772085461996, guid: 48ed9728f5ff19e45bd9504dce177832, type: 2}
       propertyPath: m_LocalPosition.z
