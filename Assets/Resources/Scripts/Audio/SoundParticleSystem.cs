@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class SoundParticleSystem : MonoBehaviour
 {
-    ParticleSystem soundSystem;
+    [HideInInspector]
+    public ParticleSystem soundSystem;
     ParticleSystem.MainModule mainSystem;
 
     float plugInLifeTime = 0;
@@ -26,8 +27,8 @@ public class SoundParticleSystem : MonoBehaviour
     public void ChangeLifeTime(bool plugIn)
     {
         mainSystem.startLifetime = (plugIn) ? plugInLifeTime : plugOutLifeTime;
-        if (plugIn)
-            StartCoroutine(RemoveExistingParticles(2));
+        //if (plugIn)
+        //    StartCoroutine(RemoveExistingParticles(2));
     }
 
     IEnumerator RemoveExistingParticles(float delayInSeconds)

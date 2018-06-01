@@ -141,8 +141,9 @@ public class UIManager : MonoBehaviour
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount;
         int nextLevelIndex = currentLevelIndex + 1;
 
-        dit werkt niet
-        return (nextLevelIndex > SceneManager.sceneCountInBuildSettings) ? "Start" : "Level " + nextLevelIndex;
+        //dit werkt niet
+        Debug.Log((SceneManager.sceneCountInBuildSettings - nonLevelSceneCount));
+        return (nextLevelIndex > SceneManager.sceneCountInBuildSettings - nonLevelSceneCount) ? "Start" : "Level " + nextLevelIndex;
     }
 
     /// Gives the latest unlocked level

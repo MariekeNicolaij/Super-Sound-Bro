@@ -191,6 +191,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rBody: {fileID: 0}
   joint2D: {fileID: 0}
+  door: {fileID: 0}
 --- !u!212 &212863797814230118
 SpriteRenderer:
   m_ObjectHideFlags: 1

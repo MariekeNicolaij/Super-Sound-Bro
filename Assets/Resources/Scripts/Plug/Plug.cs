@@ -7,6 +7,7 @@ public class Plug : MonoBehaviour
 {
     public Rigidbody2D rBody;
     public DistanceJoint2D joint2D;
+    public GameObject door;
     SoundParticleSystem sps;
     GameObject imageObject;
     BoxCollider2D triggerCollider;
@@ -16,6 +17,7 @@ public class Plug : MonoBehaviour
     Vector2 startPosition;
     bool startAnimation;
     float animationTime = 0;
+    float animationSpeed = 2;
 
     float minScale, maxScale;
     float scaleMultiplyer = 0.75f;
@@ -29,7 +31,7 @@ public class Plug : MonoBehaviour
         triggerCollider = GetComponent<BoxCollider2D>();
 
         if (!joint2D)
-                joint2D = (!GetComponent<DistanceJoint2D>()) ? gameObject.AddComponent<DistanceJoint2D>() : GetComponent<DistanceJoint2D>();
+            joint2D = (!GetComponent<DistanceJoint2D>()) ? gameObject.AddComponent<DistanceJoint2D>() : GetComponent<DistanceJoint2D>();
         joint2D.connectedBody = player.rBody;
         joint2D.enabled = false;
 
@@ -81,6 +83,9 @@ public class Plug : MonoBehaviour
         // Get its particle system
         sps = finishPlug.GetComponentInChildren<SoundParticleSystem>();
 
+        // Makes sure hold text doesnt pop up when near plug
+        player.textHelp.ToggleHoldButtonText(false);
+
         // Disables the trigger collider to make sure player cannot interact with it
         triggerCollider.enabled = false;
         // Disable joint because it will not be needed anymore
@@ -88,7 +93,7 @@ public class Plug : MonoBehaviour
         // Disable rigidbody because it will not be needed anymore and it can animate to its final position properly
         rBody.isKinematic = true;
         rBody.Sleep();
-        
+
         // Makes the particles life time shorter aka the player cant touch them anymore
         sps.ChangeLifeTime(true);
         // Player is now unable to pick this plug up
@@ -99,13 +104,13 @@ public class Plug : MonoBehaviour
         float muffleFrequency = AudioManager.instance.muffleFrequency;
 
         // Lerps audio frequency to a muffled frequency
-        muffleFilter.cutoffFrequency = Mathf.Lerp(muffleFilter.cutoffFrequency, muffleFrequency, Time.deltaTime);
+        muffleFilter.cutoffFrequency = Mathf.Lerp(muffleFilter.cutoffFrequency, muffleFrequency, Time.deltaTime * animationSpeed);
         // Lerps to position
-        transform.position = Vector2.Lerp(transform.position, finishPlug.transform.position, Time.deltaTime);
+        transform.position = Vector2.Lerp(transform.position, finishPlug.transform.position, Time.deltaTime * animationSpeed);
         // Lerps to rotation
-        transform.rotation = Quaternion.Lerp(transform.rotation, finishPlug.transform.rotation, Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, finishPlug.transform.rotation, Time.deltaTime * animationSpeed);
         // Lerps to scale
-        transform.localScale = Vector2.Lerp(transform.localScale, finishPlug.transform.localScale, Time.deltaTime);
+        transform.localScale = Vector2.Lerp(transform.localScale, finishPlug.transform.localScale, Time.deltaTime * animationSpeed);
 
         // if transformation is close
         if (Vector2.Distance(transform.position, finishPlug.transform.position) < closeFactor &&
@@ -116,6 +121,13 @@ public class Plug : MonoBehaviour
             transform.rotation = finishPlug.transform.rotation;
             transform.localScale = finishPlug.transform.localScale;
 
+            // Opens door
+            if (door)
+                door.SetActive(false);
+
+            // Geets rid of excisting particles
+            sps.soundSystem.Clear();
+
             // Done animating
             startAnimation = false;
         }
@@ -123,7 +135,7 @@ public class Plug : MonoBehaviour
 
     public void ToggleWalkThroughPlug(bool canWalkThroughPlug)
     {
-        if(!canWalkThroughPlug)
+        if (!canWalkThroughPlug)
             StartCoroutine(EnableWalkThroughPlugDelay(0.5f));      // Delay
         else
             imageObject.layer = 9;   // 0 = Default, 9 = Plug. In physics matrix player cant collide with plug

@@ -7,11 +7,16 @@ public class Player : MonoBehaviour
 {
     public Animator animator;
     public Rigidbody2D rBody;
-    LineRenderer aimLineRenderer;
-    Vector3 aimPosRaw, aimPosWorld;
+    [HideInInspector]
+    public LineRenderer aimLineRenderer;
+    [HideInInspector]
+    public TextHelp textHelp;
+    [HideInInspector]
+    public Vector3 aimPosRaw, aimPosWorld;
 
     Plug currentPlug;
-    Weapon currentWeapon;
+    [HideInInspector]
+    public Weapon currentWeapon;
 
     [Range(100, 1000)]
     public float plugThrowForce = 650;
@@ -38,6 +43,7 @@ public class Player : MonoBehaviour
 
     void Start()
     {
+        textHelp = FindObjectOfType<TextHelp>();
         aimLineRenderer = GetComponent<LineRenderer>();
         aimLineRenderer.enabled = false;
 
@@ -64,16 +70,18 @@ public class Player : MonoBehaviour
         {
             if (other.tag == "Plug")
             {
-               // if (!CanJump())
+                if (rBody.velocity.y <= 0)
                 {
                     canHold = true;
                     currentPlug = other.gameObject.GetComponent<Plug>();
+                    textHelp.ToggleHoldButtonText(true);
                 }
             }
             if (other.tag == "Weapon")
             {
                 canHold = true;
                 currentWeapon = other.gameObject.GetComponent<Weapon>();
+                textHelp.ToggleHoldButtonText(true);
             }
         }
         if (other.tag == "Finish")
@@ -84,19 +92,21 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (!isHolding && currentPlug)
+        if (!isHolding)
         {
             if (other.tag == "Plug")
             {
                 Hold(false);
                 canHold = false;
                 currentPlug = null;
+                textHelp.ToggleHoldButtonText(false);
             }
             if (other.tag == "Weapon")
             {
                 Hold(false);
                 canHold = false;
                 currentWeapon = null;
+                textHelp.ToggleHoldButtonText(false);
             }
         }
     }
@@ -190,6 +200,15 @@ public class Player : MonoBehaviour
         speed = (hold) ? holdSpeed : moveSpeed; // Change player speed
         animator.SetBool("Hold", hold);         // Change the animation according to when player is holding or not
 
+        if (hold)
+        {
+            textHelp.ToggleThrowButtonText(true);        // Shows help text for throwing and diables hold text
+        }
+        else
+        {
+            textHelp.ToggleHoldButtonText(true);        // Since object did not get thrown it should display hold text again
+        }
+
         isHolding = hold;
 
         if (!canHold)   // If you are close enough to hold and if plug and weapon exists (Plug and weapon are set in Trigger) then go
@@ -244,6 +263,8 @@ public class Player : MonoBehaviour
         if (!isHolding)
             return;
         Hold(false);
+        textHelp.ToggleThrowButtonText(false);        // Bye bye text
+        StartCoroutine(DisableTextHelp(1));
 
         if (currentPlug)
         {
@@ -253,17 +274,19 @@ public class Player : MonoBehaviour
         else if (currentWeapon)
         {
             currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce(weaponThrowForce));
-            StartCoroutine(WeaponLerpDelay(1));
+            StartCoroutine(currentWeapon.WeaponLerpDelay(1));
         }
     }
 
-    IEnumerator WeaponLerpDelay(float delayInSeconds)
+    /// <summary>
+    /// This is prettier. Other wise you would see the text change back to hold key for a sec
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DisableTextHelp(float delayInSeconds)
     {
+        textHelp.interactionText.gameObject.SetActive(false);
         yield return new WaitForSeconds(delayInSeconds);
-        currentWeapon.lerpToPlayer = true;
-        currentWeapon.rBody.gravityScale = 0;
-        currentWeapon.rBody.velocity = Vector2.zero;
-        currentWeapon = null;
+        textHelp.interactionText.gameObject.SetActive(true);
     }
 
     /// <summary>

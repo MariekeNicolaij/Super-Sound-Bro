@@ -56,6 +56,15 @@ public class Weapon : MonoBehaviour
         }
     }
 
+    public IEnumerator WeaponLerpDelay(float delayInSeconds)
+    {
+        yield return new WaitForSeconds(delayInSeconds);
+        lerpToPlayer = true;
+        rBody.gravityScale = 0;
+        rBody.velocity = Vector2.zero;
+        player.currentWeapon = null;
+    }
+
     public void LerpBackToPlayer()
     {
         transform.position = Vector2.Lerp(transform.position, player.transform.position, Time.deltaTime * boomerngSpeed);

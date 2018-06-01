@@ -26,6 +26,22 @@ public class LevelSelection : MonoBehaviour
         LockImagesCheck();
     }
 
+    void Update()
+    {
+        InputCheck();
+    }
+
+    /// <summary>
+    /// Go through levels with keys instead of buttons
+    /// </summary>
+    void InputCheck()
+    {
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.Joystick1Button4))
+            Previous();
+        else if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.Joystick1Button5))
+            Next();
+    }
+
     /// <summary>
     /// Dont forget to set them as sprite/UI in editor!
     /// </summary>
