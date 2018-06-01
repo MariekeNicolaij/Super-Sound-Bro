@@ -14,7 +14,9 @@ public class Player : MonoBehaviour
     Weapon currentWeapon;
 
     [Range(100, 1000)]
-    public float throwForce = 750;
+    public float plugThrowForce = 650;
+    [Range(10, 100)]
+    public float weaponThrowForce = 75;
     [Range(100, 2000)]
     public float jumpForce = 1000;
     [Range(0, 10)]
@@ -62,8 +64,11 @@ public class Player : MonoBehaviour
         {
             if (other.tag == "Plug")
             {
-                canHold = true;
-                currentPlug = other.gameObject.GetComponent<Plug>();
+               // if (!CanJump())
+                {
+                    canHold = true;
+                    currentPlug = other.gameObject.GetComponent<Plug>();
+                }
             }
             if (other.tag == "Weapon")
             {
@@ -159,8 +164,10 @@ public class Player : MonoBehaviour
     void Jump()
     {
         if (CanJump())
+        {
             rBody.AddForce(Vector2.up * jumpForce);
-        animator.SetBool("CanJump", false);
+            animator.SetBool("CanJump", false);
+        }
     }
 
     public void Pause()
@@ -240,12 +247,12 @@ public class Player : MonoBehaviour
 
         if (currentPlug)
         {
-            currentPlug.rBody.AddForce(ThrowDirection() * ActualThrowForce());
+            currentPlug.rBody.AddForce(ThrowDirection() * ActualThrowForce(plugThrowForce));
             currentPlug = null;
         }
         else if (currentWeapon)
         {
-            currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce());
+            currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce(weaponThrowForce));
             StartCoroutine(WeaponLerpDelay(1));
         }
     }
@@ -272,7 +279,7 @@ public class Player : MonoBehaviour
     /// Multiplies specified throwforce with the throw distance (aim line)
     /// </summary>
     /// <returns></returns>
-    float ActualThrowForce()
+    float ActualThrowForce(float throwForce)
     {
         float distance = Vector2.Distance(transform.position, aimPosWorld);
         return distance * throwForce;

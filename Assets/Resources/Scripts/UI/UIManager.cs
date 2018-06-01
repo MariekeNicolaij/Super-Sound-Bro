@@ -141,6 +141,7 @@ public class UIManager : MonoBehaviour
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount;
         int nextLevelIndex = currentLevelIndex + 1;
 
+        dit werkt niet
         return (nextLevelIndex > SceneManager.sceneCountInBuildSettings) ? "Start" : "Level " + nextLevelIndex;
     }
 

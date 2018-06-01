@@ -7,7 +7,7 @@ public class SoundParticleSystem : MonoBehaviour
     ParticleSystem soundSystem;
     ParticleSystem.MainModule mainSystem;
 
-    float plugInLifeTime = 1;
+    float plugInLifeTime = 0;
     float plugOutLifeTime = 6f;
 
     void Start()
@@ -26,5 +26,13 @@ public class SoundParticleSystem : MonoBehaviour
     public void ChangeLifeTime(bool plugIn)
     {
         mainSystem.startLifetime = (plugIn) ? plugInLifeTime : plugOutLifeTime;
+        if (plugIn)
+            StartCoroutine(RemoveExistingParticles(2));
+    }
+
+    IEnumerator RemoveExistingParticles(float delayInSeconds)
+    {
+        yield return new WaitForSeconds(delayInSeconds);
+        soundSystem.Clear();
     }
 }
