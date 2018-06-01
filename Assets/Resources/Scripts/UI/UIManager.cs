@@ -28,6 +28,9 @@ public class UIManager : MonoBehaviour
             volumeSlider.value = PlayerPrefs.GetFloat("MusicVolume", 1) * 100;
             volumeSlider.GetComponentInChildren<Text>().text = PlayerPrefs.GetFloat("MusicVolume", 1) * 100 + "%";
         }
+
+        if(startPanel)
+        AnimatePanel(startPanel);
     }
 
     void OnVolumeSliderChange(float value)
@@ -92,32 +95,42 @@ public class UIManager : MonoBehaviour
 
     public void ToggleLevelCompletePanel(bool show)
     {
-        if (show)
-            EventSystem.current.SetSelectedGameObject(levelCompletePanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         levelCompletePanel.SetActive(show);
         if (show)
+        {
+        // Focuses on one button so if you use controller you can mage through UI
+            EventSystem.current.SetSelectedGameObject(levelCompletePanel.GetComponentInChildren<Button>().gameObject);
             title.text = "Level Complete!";
+            AnimatePanel(levelCompletePanel);
+        }
+        
     }
 
     public void TogglePausePanel(bool show)
     {
-        if (show)
-            EventSystem.current.SetSelectedGameObject(pausePanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         pausePanel.SetActive(show);
         if (show)
+        {
+            // Focuses on one button so if you use controller you can mage through UI
+            EventSystem.current.SetSelectedGameObject(pausePanel.GetComponentInChildren<Button>().gameObject);
             title.text = "Pause";
+            //AnimatePanel(pausePanel);
+        }
     }
 
     public void ToggleGameOverPanel(bool show)
     {
-        if (show)
-            EventSystem.current.SetSelectedGameObject(gameOverPanel.GetComponentInChildren<Button>().gameObject);
         Cursor.visible = show;
         gameOverPanel.SetActive(show);
         if (show)
-            title.text = (show) ? "Game Over!" : "";
+        {
+            // Focuses on one button so if you use controller you can mage through UI
+            EventSystem.current.SetSelectedGameObject(gameOverPanel.GetComponentInChildren<Button>().gameObject);
+            title.text = "Game Over!";
+            AnimatePanel(gameOverPanel);
+        }
     }
 
     public void NextLevel()
@@ -181,5 +194,18 @@ public class UIManager : MonoBehaviour
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
         PlayerPrefs.SetString("Scene", "Start");
+    }
+
+    public void AnimatePanel(GameObject panel)
+    {
+        float speed = 1.5f;
+        Vector3 tempPos = panel.transform.position;
+        //Vector3 tempScale = panel.transform.localScale;
+
+        panel.transform.position = new Vector3(Screen.width, panel.transform.position.y);
+        //panel.transform.localScale = Vector3.zero;
+
+        iTween.MoveTo(panel, iTween.Hash("position", tempPos, "time", speed, "easetype", "easeoutelastic"));
+        //iTween.ScaleTo(panel, iTween.Hash("scale", tempScale, "time", speed));
     }
 }

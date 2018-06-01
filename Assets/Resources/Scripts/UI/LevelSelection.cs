@@ -121,6 +121,22 @@ public class LevelSelection : MonoBehaviour
         return i;
     }
 
+    void AnimatePreviousImage(bool clickedPrevious)
+    {
+        float speed = 1.5f;
+        if (clickedPrevious)
+        {
+            Vector3 previousPos = new Vector3(-Screen.width, previousLevelImage.transform.position.y);
+            Vector3 currentPos = previousLevelImage.transform.position;
+            Vector3 nextPos = currentLevelImage.transform.position;
+
+            // Animate level images to the left
+            iTween.MoveTo(previousLevelImage.gameObject, iTween.Hash("position", previousPos, "time", speed, "easetype", "easeinoutback"));
+            iTween.MoveTo(currentLevelImage.gameObject, iTween.Hash("position", currentPos, "time", speed, "easetype", "easeinoutback"));
+            iTween.MoveTo(nextLevelImage.gameObject, iTween.Hash("position", nextPos, "time", speed, "easetype", "easeinoutback"));
+        }
+    }
+
     public void StartGame()
     {
         Cursor.visible = false;

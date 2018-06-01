@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
     bool canHold;
     bool facingRight = true;
 
-    bool pause, gameOver;
+    bool pause, gameOver, levelComplete;
 
 
     void Start()
@@ -113,12 +113,19 @@ public class Player : MonoBehaviour
 
     void InputCheck()
     {
+        if (gameOver || levelComplete)
+            return;
+
+        if (Input.GetButtonDown("Pause"))
+            Pause();
+
+        if (pause)
+            return;
+
         if (Input.GetAxis("Horizontal") != 0)
             Move();
         if (Input.GetButtonDown("Jump"))
             Jump();
-        if (Input.GetButtonDown("Pause"))
-            Pause();
         if (Input.GetButtonDown("Throw"))
             Throw();
         if (Input.GetButtonDown("Hold"))
@@ -311,14 +318,13 @@ public class Player : MonoBehaviour
     public void GameOver()
     {
         gameOver = true;
-        Time.timeScale = 0;
         UIManager.instance.ToggleGameOverPanel(true);
         AudioManager.instance.PlaySound(SoundType.Death);
     }
 
     void LevelComplete()
     {
-        Time.timeScale = 0;
+        levelComplete = true;
         UIManager.instance.ToggleLevelCompletePanel(true);
         AudioManager.instance.PlaySound(SoundType.Victory);
     }
