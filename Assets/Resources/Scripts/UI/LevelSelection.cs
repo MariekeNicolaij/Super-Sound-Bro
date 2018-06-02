@@ -69,7 +69,7 @@ public class LevelSelection : MonoBehaviour
     /// <returns></returns>
     int GetLevelCount()
     {
-        return SceneManager.sceneCountInBuildSettings - 3; // 3 = start, loading and level selection scene
+        return SceneManager.sceneCountInBuildSettings - UIManager.instance.nonLevelSceneCount;
     }
 
     /// <summary>

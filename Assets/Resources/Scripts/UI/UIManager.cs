@@ -13,7 +13,7 @@ public class UIManager : MonoBehaviour
     public Slider volumeSlider;
     public Button resetButton;
 
-    int nonLevelSceneCount = 3;
+    public int nonLevelSceneCount = 4;     // Start, Level Selection, Loading, Finished
 
 
     void Awake()
@@ -29,8 +29,8 @@ public class UIManager : MonoBehaviour
             volumeSlider.GetComponentInChildren<Text>().text = PlayerPrefs.GetFloat("MusicVolume", 1) * 100 + "%";
         }
 
-        if(startPanel)
-        AnimatePanel(startPanel);
+        if (startPanel)
+            AnimatePanel(startPanel);
     }
 
     void OnVolumeSliderChange(float value)
@@ -99,12 +99,12 @@ public class UIManager : MonoBehaviour
         levelCompletePanel.SetActive(show);
         if (show)
         {
-        // Focuses on one button so if you use controller you can mage through UI
+            // Focuses on one button so if you use controller you can mage through UI
             EventSystem.current.SetSelectedGameObject(levelCompletePanel.GetComponentInChildren<Button>().gameObject);
             title.text = "Level Complete!";
             AnimatePanel(levelCompletePanel);
         }
-        
+
     }
 
     public void TogglePausePanel(bool show)
@@ -140,8 +140,10 @@ public class UIManager : MonoBehaviour
 
         PlayerPrefs.SetInt("LatestUnlockedLevel", GetLatestUnlockedLevelIndex());
         SceneManager.LoadScene("Loading");
-        PlayerPrefs.SetString("Scene", GetNextLevelName());
-        Cursor.visible = false;
+        string nextLevelName = GetNextLevelName();
+        PlayerPrefs.SetString("Scene", nextLevelName);
+        if (nextLevelName != "Finished")
+            Cursor.visible = false;
     }
 
     /// <summary>
@@ -154,9 +156,9 @@ public class UIManager : MonoBehaviour
         int currentLevelIndex = SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount;
         int nextLevelIndex = currentLevelIndex + 1;
 
-        //dit werkt niet
-        Debug.Log((SceneManager.sceneCountInBuildSettings - nonLevelSceneCount));
-        return (nextLevelIndex > SceneManager.sceneCountInBuildSettings - nonLevelSceneCount) ? "Start" : "Level " + nextLevelIndex;
+        bool completedAllLevels = (nextLevelIndex > (SceneManager.sceneCountInBuildSettings - nonLevelSceneCount) - 1); // -1 because index, level 0 also exists
+
+        return (completedAllLevels) ? "Finished" : "Level " + nextLevelIndex;
     }
 
     /// Gives the latest unlocked level
