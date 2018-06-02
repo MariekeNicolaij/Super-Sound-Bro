@@ -16,6 +16,10 @@ public class LevelSelection : MonoBehaviour
     int currentLevel = 0;
     int latestUnlockedLevel = 0;
 
+    // pn = previous and next, c = current
+    Vector3 pnScale, cScale;
+    float animationSpeed = 0.75f;
+
 
     void Start()
     {
@@ -24,6 +28,11 @@ public class LevelSelection : MonoBehaviour
         latestUnlockedLevel = GetLatestUnlockedLevel();
         SetLevelImages();
         LockImagesCheck();
+
+        pnScale = previousLevelImage.transform.localScale;              // Set standard scale
+        cScale = currentLevelImage.transform.localScale;                // Set standard scale
+
+        AnimateImages(false);
     }
 
     void Update()
@@ -99,16 +108,32 @@ public class LevelSelection : MonoBehaviour
 
     public void Previous()
     {
-        currentLevel = IndexCheck(currentLevel - 1);
-        SetLevelImages();
-        LockImagesCheck();
+        StartCoroutine(ChangeLevelImages(animationSpeed, false));
     }
 
     public void Next()
     {
-        currentLevel = IndexCheck(currentLevel + 1);
+        StartCoroutine(ChangeLevelImages(animationSpeed, true));
+    }
+
+    public IEnumerator ChangeLevelImages(float delayInSeconds, bool next)
+    {
+        // Set current level
+        currentLevel = (next) ? IndexCheck(currentLevel + 1) : IndexCheck(currentLevel - 1);
+
+        // Animate the images before they change
+        AnimateImages(true);
+
+        // Wait till animation is finished
+        yield return new WaitForSeconds(delayInSeconds);
+
+        // Set new images
         SetLevelImages();
+        // Check if they are unlocked
         LockImagesCheck();
+
+        // Animate the images back
+        AnimateImages(false);
     }
 
     int IndexCheck(int i)
@@ -121,19 +146,21 @@ public class LevelSelection : MonoBehaviour
         return i;
     }
 
-    void AnimatePreviousImage(bool clickedPrevious)
+    void AnimateImages(bool fadeOut)
     {
-        float speed = 1.5f;
-        if (clickedPrevious)
+        if (fadeOut)
         {
-            Vector3 previousPos = new Vector3(-Screen.width, previousLevelImage.transform.position.y);
-            Vector3 currentPos = previousLevelImage.transform.position;
-            Vector3 nextPos = currentLevelImage.transform.position;
-
-            // Animate level images to the left
-            iTween.MoveTo(previousLevelImage.gameObject, iTween.Hash("position", previousPos, "time", speed, "easetype", "easeinoutback"));
-            iTween.MoveTo(currentLevelImage.gameObject, iTween.Hash("position", currentPos, "time", speed, "easetype", "easeinoutback"));
-            iTween.MoveTo(nextLevelImage.gameObject, iTween.Hash("position", nextPos, "time", speed, "easetype", "easeinoutback"));
+            // scale level images to zero
+            iTween.ScaleTo(previousLevelImage.gameObject, iTween.Hash("scale", Vector3.zero, "time", animationSpeed, "easetype", "easeinoutexpo"));
+            iTween.ScaleTo(currentLevelImage.gameObject, iTween.Hash("scale", Vector3.zero, "time", animationSpeed, "easetype", "easeinoutexpo"));
+            iTween.ScaleTo(nextLevelImage.gameObject, iTween.Hash("scale", Vector3.zero, "time", animationSpeed, "easetype", "easeinoutexpo"));
+        }
+        else
+        {
+            // scale level images to normal size
+            iTween.ScaleTo(previousLevelImage.gameObject, iTween.Hash("scale", pnScale, "time", animationSpeed, "easetype", "easeinoutexpo"));
+            iTween.ScaleTo(currentLevelImage.gameObject, iTween.Hash("scale", cScale, "time", animationSpeed, "easetype", "easeinoutexpo"));
+            iTween.ScaleTo(nextLevelImage.gameObject, iTween.Hash("scale", pnScale, "time", animationSpeed, "easetype", "easeinoutexpo"));
         }
     }
 
