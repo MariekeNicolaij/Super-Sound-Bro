@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour
@@ -50,13 +51,21 @@ public class Player : MonoBehaviour
         speed = moveSpeed;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
-    }
+    } 
 
     void Update()
     {
+        Analytics();
         InputCheck();
         Animations();
         FallCheck();
+    }
+
+    void Analytics()
+    {
+        if(aids dan doe iets)
+        AnalyticsEvent.Custom("Move");
+        AnalyticsEvent.Custom("Jump");
     }
 
     void OnCollisionEnter2D(Collision2D other)
