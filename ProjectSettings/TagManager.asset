@@ -11,6 +11,7 @@ TagManager:
   - Weapon
   - Enemy
   - Obstacle
+  - Sps
   layers:
   - Default
   - TransparentFX
