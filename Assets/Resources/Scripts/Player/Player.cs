@@ -1,11 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
-using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    //AnalyticsEvent.Custom("Event");
     public Animator animator;
     public Rigidbody2D rBody;
     [HideInInspector]
@@ -40,6 +39,7 @@ public class Player : MonoBehaviour
     bool facingRight = true;
 
     bool pause, gameOver, levelComplete;
+    float timeToCompleteLevel;
 
 
     void Start()
@@ -51,21 +51,20 @@ public class Player : MonoBehaviour
         speed = moveSpeed;
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
-    } 
+
+        if (Input.GetJoystickNames().Length == 0)       // Listens to mouse input
+            AnalyticsEvent.Custom("Player uses keyboard");
+        else
+            AnalyticsEvent.Custom("Player uses controller");
+    }
 
     void Update()
     {
-        Analytics();
+        // For analytics stuff
+        timeToCompleteLevel += Time.deltaTime;
         InputCheck();
         Animations();
         FallCheck();
-    }
-
-    void Analytics()
-    {
-        if(aids dan doe iets)
-        AnalyticsEvent.Custom("Move");
-        AnalyticsEvent.Custom("Jump");
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -210,20 +209,18 @@ public class Player : MonoBehaviour
 
     public void Hold(bool hold)
     {
-        if (!CanJump() && !isHolding)     // We don't want the player to pickup the plug mid-air
+        if (!CanJump() && !isHolding)     // We don't want the player to pickup the object mid-air
+        {
+            AnalyticsEvent.Custom("Player tries to 'Hold' while jumping");
             return;
-
+        }
         speed = (hold) ? holdSpeed : moveSpeed; // Change player speed
         animator.SetBool("Hold", hold);         // Change the animation according to when player is holding or not
 
         if (hold)
-        {
             textHelp.ToggleThrowButtonText(true);        // Shows help text for throwing and diables hold text
-        }
         else
-        {
             textHelp.ToggleHoldButtonText(true);        // Since object did not get thrown it should display hold text again
-        }
 
         isHolding = hold;
 
@@ -243,6 +240,7 @@ public class Player : MonoBehaviour
         aimLineRenderer.enabled = hold;
         currentPlug.ToggleWalkThroughPlug(hold);
         currentPlug.joint2D.enabled = hold;
+        AnalyticsEvent.Custom("Player throws plug");
     }
 
     void ToggleHoldWeapon(bool hold)
@@ -252,6 +250,7 @@ public class Player : MonoBehaviour
         aimLineRenderer.enabled = hold;
         currentWeapon.ToggleWalkThroughWeapon(hold);
         currentWeapon.joint2D.enabled = hold;
+        AnalyticsEvent.Custom("Player throws weapon");
     }
 
     void UpdateAimPosInWorldSpace()
@@ -334,6 +333,7 @@ public class Player : MonoBehaviour
     void LevelComplete()
     {
         levelComplete = true;
+        AnalyticsEvent.Custom("Player completes level " + (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " in " + timeToCompleteLevel + " seconds");
         UIManager.instance.ToggleLevelCompletePanel(true);
         AudioManager.instance.PlaySound(SoundType.Victory);
     }
