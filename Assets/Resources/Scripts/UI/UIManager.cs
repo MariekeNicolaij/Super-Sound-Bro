@@ -126,6 +126,7 @@ public class UIManager : MonoBehaviour
         gameOverPanel.SetActive(show);
         if (show)
         {
+            Debug.Log(Time.timeScale);
             // Focuses on one button so if you use controller you can mage through UI
             EventSystem.current.SetSelectedGameObject(gameOverPanel.GetComponentInChildren<Button>().gameObject);
             title.text = "Game Over!";
