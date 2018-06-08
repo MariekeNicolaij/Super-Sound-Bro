@@ -126,7 +126,6 @@ public class UIManager : MonoBehaviour
         gameOverPanel.SetActive(show);
         if (show)
         {
-            Debug.Log(Time.timeScale);
             // Focuses on one button so if you use controller you can mage through UI
             EventSystem.current.SetSelectedGameObject(gameOverPanel.GetComponentInChildren<Button>().gameObject);
             title.text = "Game Over!";
@@ -203,6 +202,7 @@ public class UIManager : MonoBehaviour
     {
         float speed = 1.5f;
         Vector3 tempPos = panel.transform.position;
+            Debug.Log(tempPos);
         //Vector3 tempScale = panel.transform.localScale;
 
         panel.transform.position = new Vector3(Screen.width, panel.transform.position.y);

@@ -16,24 +16,11 @@ public class SoundParticleSystem : MonoBehaviour
         soundSystem = GetComponent<ParticleSystem>();
         mainSystem = soundSystem.main;
         mainSystem.startLifetime = plugOutLifeTime;
-    }
-    
-    void OnParticleCollision(GameObject other)
-    {
-        if (other.tag == "Player")
-            GameObject.FindGameObjectWithTag("Player").GetComponent<Player>().GameOver();
+        tag = "Sps";
     }
 
     public void ChangeLifeTime(bool plugIn)
     {
         mainSystem.startLifetime = (plugIn) ? plugInLifeTime : plugOutLifeTime;
-        //if (plugIn)
-        //    StartCoroutine(RemoveExistingParticles(2));
-    }
-
-    IEnumerator RemoveExistingParticles(float delayInSeconds)
-    {
-        yield return new WaitForSeconds(delayInSeconds);
-        soundSystem.Clear();
     }
 }

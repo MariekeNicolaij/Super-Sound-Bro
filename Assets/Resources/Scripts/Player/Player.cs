@@ -74,6 +74,8 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
+        if (gameOver || levelComplete)
+            return;
         if (!isHolding)
         {
             if (other.tag == "Plug")
@@ -98,8 +100,18 @@ public class Player : MonoBehaviour
             GameOver();
     }
 
+    void OnParticleCollision(GameObject other)
+    {
+        if (gameOver || levelComplete)
+            return;
+        if (other.tag == "Sps")
+            GameOver();
+    }
+
     void OnTriggerExit2D(Collider2D other)
     {
+        if (gameOver || levelComplete)
+            return;
         if (!isHolding)
         {
             if (other.tag == "Plug")
@@ -151,6 +163,8 @@ public class Player : MonoBehaviour
 
     void FallCheck()
     {
+        if (gameOver || levelComplete)
+            return;
         if (transform.position.y < -50)
         {
             transform.position = startPosition;
