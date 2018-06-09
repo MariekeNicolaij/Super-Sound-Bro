@@ -12,6 +12,7 @@ TagManager:
   - Enemy
   - Obstacle
   - Sps
+  - Spikes
   layers:
   - Default
   - TransparentFX

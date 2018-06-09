@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
     {
         animator.SetBool("CanJump", true);
 
-        if (other.transform.tag == "Enemy")
+        if (other.transform.tag == "Enemy" || other.transform.tag == "Spikes")
             GameOver();
     }
 
