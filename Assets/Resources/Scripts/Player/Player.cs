@@ -70,6 +70,9 @@ public class Player : MonoBehaviour
     void OnCollisionEnter2D(Collision2D other)
     {
         animator.SetBool("CanJump", true);
+
+        if (other.transform.tag == "Enemy")
+            GameOver();
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -96,8 +99,6 @@ public class Player : MonoBehaviour
         }
         if (other.tag == "Finish")
             LevelComplete();
-        if (other.tag == "Enemy")
-            GameOver();
     }
 
     void OnParticleCollision(GameObject other)
