@@ -341,6 +341,7 @@ public class Player : MonoBehaviour
     public void GameOver()
     {
         gameOver = true;
+        AnalyticsEvent.Custom("Player died in level " + (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " after " + timeToCompleteLevel + " seconds");
         UIManager.instance.ToggleGameOverPanel(true);
         AudioManager.instance.PlaySound(SoundType.Death);
     }
