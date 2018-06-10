@@ -65,6 +65,7 @@ public class Player : MonoBehaviour
         InputCheck();
         Animations();
         FallCheck();
+        CanJump();
     }
 
     void OnCollisionEnter2D(Collision2D other)

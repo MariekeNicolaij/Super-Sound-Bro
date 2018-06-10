@@ -70,7 +70,6 @@ public class BaseAI : MonoBehaviour
             stateManager.SwitchState(new DieState());
         if(other.transform.tag == "Obstacle")
         {
-            Debug.Log("Hit");
             Flip();
             direction = OppositeDirection();
         }
