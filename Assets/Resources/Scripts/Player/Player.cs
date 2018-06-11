@@ -70,6 +70,8 @@ public class Player : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other)
     {
+        if (gameOver || levelComplete || pause)
+            return;
         animator.SetBool("CanJump", true);
 
         if (other.transform.tag == "Enemy" || other.transform.tag == "Spikes")
@@ -78,7 +80,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (gameOver || levelComplete)
+        if (gameOver || levelComplete || pause)
             return;
         if (!isHolding)
         {
@@ -104,7 +106,7 @@ public class Player : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
-        if (gameOver || levelComplete)
+        if (gameOver || levelComplete || pause)
             return;
         if (other.tag == "Sps")
             GameOver();
@@ -112,7 +114,7 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (gameOver || levelComplete)
+        if (gameOver || levelComplete || pause)
             return;
         if (!isHolding)
         {
@@ -135,7 +137,7 @@ public class Player : MonoBehaviour
 
     void InputCheck()
     {
-        if (gameOver || levelComplete)
+        if (gameOver || levelComplete || pause)
             return;
 
         if (Input.GetButtonDown("Pause"))
@@ -165,7 +167,7 @@ public class Player : MonoBehaviour
 
     void FallCheck()
     {
-        if (gameOver || levelComplete)
+        if (gameOver || levelComplete || pause)
             return;
         if (transform.position.y < -50)
         {
