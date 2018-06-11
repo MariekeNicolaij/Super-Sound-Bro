@@ -1088,6 +1088,7 @@ MonoBehaviour:
   gameOverPanel: {fileID: 0}
   volumeSlider: {fileID: 628963917}
   resetButton: {fileID: 1999575560}
+  nonLevelSceneCount: 4
 --- !u!4 &1545510304
 Transform:
   m_ObjectHideFlags: 0

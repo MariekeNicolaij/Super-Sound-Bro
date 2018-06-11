@@ -352,7 +352,7 @@ public class Player : MonoBehaviour
     void LevelComplete()
     {
         levelComplete = true;
-        AnalyticsEvent.Custom("Player completes level " + (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " in " + timeToCompleteLevel + " seconds");
+        AnalyticsEvent.Custom("Player completes level " + Mathf.RoundToInt(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " in " + timeToCompleteLevel + " seconds");
         UIManager.instance.ToggleLevelCompletePanel(true);
         AudioManager.instance.PlaySound(SoundType.Victory);
     }
