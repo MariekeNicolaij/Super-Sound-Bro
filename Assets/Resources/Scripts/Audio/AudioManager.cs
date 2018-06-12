@@ -30,8 +30,8 @@ public class AudioManager : MonoBehaviour
     [HideInInspector]
     public AudioClip song;
 
-    public float sfxVolume = 100;
-    public float musicVolume = 100;
+    public float sfxVolume = 1;
+    public float musicVolume = 1;
 
     bool nextSongTimer = false;
     float nextSongTime = 0;
@@ -50,7 +50,6 @@ public class AudioManager : MonoBehaviour
 
         SetMusicList();
         SetVolume();
-
 
         PlayRandomMusic();
         Debug.Log("Play random music");

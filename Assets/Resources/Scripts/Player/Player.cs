@@ -66,6 +66,7 @@ public class Player : MonoBehaviour
         Animations();
         FallCheck();
         CanJump();
+        HandleVolume();
     }
 
     void OnCollisionEnter2D(Collision2D other)
@@ -309,6 +310,23 @@ public class Player : MonoBehaviour
             currentWeapon.rBody.AddForce(ThrowDirection() * ActualThrowForce(weaponThrowForce));
             StartCoroutine(currentWeapon.WeaponLerpDelay(1));
         }
+    }
+
+    /// <summary>
+    /// Increases or decrease volume depending on how close player gets to finish plug
+    /// </summary>
+    void HandleVolume()
+    {
+        if (!GameObject.FindGameObjectWithTag("Finish Plug"))
+            return;
+        Vector3 spsPos = GameObject.FindGameObjectWithTag("Finish Plug").transform.position;
+        float distance = Vector2.Distance(transform.position, spsPos);
+        float multiplyer = 1.75f;
+
+        float volume = (100 - distance * multiplyer) * AudioManager.instance.musicVolume / 100;
+        if (volume <= 0.5f)
+            volume = 0.5f;
+        AudioManager.instance.musicSource.volume = volume;
     }
 
     /// <summary>

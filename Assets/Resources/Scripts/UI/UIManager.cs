@@ -19,8 +19,6 @@ public class UIManager : MonoBehaviour
     void Awake()
     {
         instance = this;
-        if (!FindObjectOfType<AudioManager>())
-            gameObject.AddComponent<AudioManager>();
 
         if (volumeSlider)
         {
@@ -202,7 +200,6 @@ public class UIManager : MonoBehaviour
     {
         float speed = 1.5f;
         Vector3 tempPos = panel.transform.position;
-            Debug.Log(tempPos);
         //Vector3 tempScale = panel.transform.localScale;
 
         panel.transform.position = new Vector3(Screen.width, panel.transform.position.y);
