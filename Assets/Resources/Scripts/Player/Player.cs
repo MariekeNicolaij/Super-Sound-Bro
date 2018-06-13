@@ -1,6 +1,8 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Analytics;
+using UnityEngine.Networking;
 
 public class Player : MonoBehaviour
 {
@@ -39,7 +41,6 @@ public class Player : MonoBehaviour
     bool facingRight = true;
 
     bool pause, gameOver, levelComplete;
-    float timeToCompleteLevel;
 
 
     void Start()
@@ -52,16 +53,15 @@ public class Player : MonoBehaviour
         defaultScale = transform.localScale.x;
         startPosition = transform.position;
 
-        if (Input.GetJoystickNames().Length == 0)       // Listens to mouse input
-            AnalyticsEvent.Custom("Player uses keyboard");
-        else
-            AnalyticsEvent.Custom("Player uses controller");
+        AnalyticsEvent.Custom("Keyboard / Controller", new Dictionary<string, object>
+        {
+            { "Player ID", PlayerPrefs.GetInt("PlayerID") },
+            { "Device", (Input.GetJoystickNames().Length == 0) ? "Keyboard" : "Controller"},
+        });
     }
 
     void Update()
     {
-        // For analytics stuff
-        timeToCompleteLevel += Time.deltaTime;
         InputCheck();
         Animations();
         FallCheck();
@@ -230,7 +230,11 @@ public class Player : MonoBehaviour
     {
         if (!CanJump() && !isHolding)     // We don't want the player to pickup the object mid-air
         {
-            AnalyticsEvent.Custom("Player tries to 'Hold' while jumping");
+            AnalyticsEvent.Custom("Player tries to 'Hold' while jumping", new Dictionary<string, object>
+            {
+            { "Player ID", PlayerPrefs.GetInt("PlayerID") },
+                { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
+            });
             return;
         }
         speed = (hold) ? holdSpeed : moveSpeed; // Change player speed
@@ -259,7 +263,6 @@ public class Player : MonoBehaviour
         aimLineRenderer.enabled = hold;
         currentPlug.ToggleWalkThroughPlug(hold);
         currentPlug.joint2D.enabled = hold;
-        AnalyticsEvent.Custom("Player throws plug");
     }
 
     void ToggleHoldWeapon(bool hold)
@@ -269,7 +272,6 @@ public class Player : MonoBehaviour
         aimLineRenderer.enabled = hold;
         currentWeapon.ToggleWalkThroughWeapon(hold);
         currentWeapon.joint2D.enabled = hold;
-        AnalyticsEvent.Custom("Player throws weapon");
     }
 
     void UpdateAimPosInWorldSpace()
@@ -324,8 +326,8 @@ public class Player : MonoBehaviour
         float multiplyer = 1.75f;
 
         float volume = (100 - distance * multiplyer) * AudioManager.instance.musicVolume / 100;
-        if (volume <= 0.5f)
-            volume = 0.5f;
+        if (volume <= 0.25f)
+            volume = 0.25f;
         AudioManager.instance.musicSource.volume = volume;
     }
 
@@ -362,7 +364,14 @@ public class Player : MonoBehaviour
     public void GameOver()
     {
         gameOver = true;
-        AnalyticsEvent.Custom("Player died in level " + (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " after " + timeToCompleteLevel + " seconds");
+
+        AnalyticsEvent.Custom("Gameover", new Dictionary<string, object>
+        {
+            { "Player ID", PlayerPrefs.GetInt("PlayerID") },
+            { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
+            { "Time", Time.timeSinceLevelLoad }
+        });
+
         UIManager.instance.ToggleGameOverPanel(true);
         AudioManager.instance.PlaySound(SoundType.Death);
     }
@@ -370,7 +379,14 @@ public class Player : MonoBehaviour
     void LevelComplete()
     {
         levelComplete = true;
-        AnalyticsEvent.Custom("Player completes level " + Mathf.RoundToInt(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) + " in " + timeToCompleteLevel + " seconds");
+
+        AnalyticsEvent.Custom("Level complete", new Dictionary<string, object>
+        {
+            { "Player ID", PlayerPrefs.GetInt("PlayerID") },
+            { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
+            { "Time", Time.timeSinceLevelLoad }
+        });
+
         UIManager.instance.ToggleLevelCompletePanel(true);
         AudioManager.instance.PlaySound(SoundType.Victory);
     }

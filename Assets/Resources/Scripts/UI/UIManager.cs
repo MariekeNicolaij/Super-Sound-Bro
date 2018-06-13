@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -175,6 +176,12 @@ public class UIManager : MonoBehaviour
 
     public void RestartLevel()
     {
+        AnalyticsEvent.Custom("Restarts level", new Dictionary<string, object>
+        {
+            { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
+            { "Time", Time.timeSinceLevelLoad }
+        });
+
         AudioManager.instance.ResetMuffleFrequency();
         Time.timeScale = 1;
         SceneManager.LoadScene("Loading");
@@ -184,8 +191,10 @@ public class UIManager : MonoBehaviour
 
     public void Reset()
     {
+        int temp = PlayerPrefs.GetInt("PlayerID");
         PlayerPrefs.DeleteAll();
         resetButton.interactable = false;
+        PlayerPrefs.SetInt("PlayerID", temp);
     }
 
     public void Menu()
