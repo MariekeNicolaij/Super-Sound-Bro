@@ -369,7 +369,7 @@ public class Player : MonoBehaviour
         {
             { "Player ID", PlayerPrefs.GetInt("PlayerID") },
             { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
-            { "Time", Time.timeSinceLevelLoad }
+            { "Time", Mathf.RoundToInt(Time.timeSinceLevelLoad) }
         });
 
         UIManager.instance.ToggleGameOverPanel(true);
@@ -384,7 +384,7 @@ public class Player : MonoBehaviour
         {
             { "Player ID", PlayerPrefs.GetInt("PlayerID") },
             { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
-            { "Time", Time.timeSinceLevelLoad }
+            { "Time", Mathf.RoundToInt(Time.timeSinceLevelLoad) }
         });
 
         UIManager.instance.ToggleLevelCompletePanel(true);

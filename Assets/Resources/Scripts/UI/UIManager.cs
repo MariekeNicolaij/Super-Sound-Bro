@@ -178,8 +178,9 @@ public class UIManager : MonoBehaviour
     {
         AnalyticsEvent.Custom("Restarts level", new Dictionary<string, object>
         {
-            { "Level", (UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex - UIManager.instance.nonLevelSceneCount) },
-            { "Time", Time.timeSinceLevelLoad }
+            { "Player ID", PlayerPrefs.GetInt("PlayerID") },
+            { "Level", (SceneManager.GetActiveScene().buildIndex - nonLevelSceneCount) },
+            { "Time", Mathf.RoundToInt(Time.timeSinceLevelLoad) }
         });
 
         AudioManager.instance.ResetMuffleFrequency();
