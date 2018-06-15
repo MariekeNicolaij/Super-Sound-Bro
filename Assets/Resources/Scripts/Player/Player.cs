@@ -73,7 +73,8 @@ public class Player : MonoBehaviour
     {
         if (gameOver || levelComplete || pause)
             return;
-        animator.SetBool("CanJump", true);
+        if (rBody.velocity.y <= 0)
+            animator.SetBool("CanJump", true);
 
         if (other.transform.tag == "Enemy" || other.transform.tag == "Spikes")
             GameOver();
@@ -81,25 +82,23 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (gameOver || levelComplete || pause)
+        if (gameOver || levelComplete || pause || isHolding)
             return;
-        if (!isHolding)
+
+        if (other.tag == "Plug")
         {
-            if (other.tag == "Plug")
-            {
-                if (rBody.velocity.y <= 0)
-                {
-                    canHold = true;
-                    currentPlug = other.gameObject.GetComponent<Plug>();
-                    textHelp.ToggleHoldButtonText(true);
-                }
-            }
-            if (other.tag == "Weapon")
+            if (rBody.velocity.y <= 0)
             {
                 canHold = true;
-                currentWeapon = other.gameObject.GetComponent<Weapon>();
+                currentPlug = other.gameObject.GetComponent<Plug>();
                 textHelp.ToggleHoldButtonText(true);
             }
+        }
+        if (other.tag == "Weapon")
+        {
+            canHold = true;
+            currentWeapon = other.gameObject.GetComponent<Weapon>();
+            textHelp.ToggleHoldButtonText(true);
         }
         if (other.tag == "Finish")
             LevelComplete();
@@ -115,10 +114,9 @@ public class Player : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
-        if (gameOver || levelComplete || pause)
+        if (gameOver || levelComplete || pause || isHolding)
             return;
-        if (!isHolding)
-        {
+
             if (other.tag == "Plug")
             {
                 Hold(false);
@@ -133,7 +131,6 @@ public class Player : MonoBehaviour
                 currentWeapon = null;
                 textHelp.ToggleHoldButtonText(false);
             }
-        }
     }
 
     void InputCheck()
