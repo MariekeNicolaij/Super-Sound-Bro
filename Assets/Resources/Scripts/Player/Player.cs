@@ -322,10 +322,14 @@ public class Player : MonoBehaviour
         float distance = Vector2.Distance(transform.position, spsPos);
         float multiplyer = 1.75f;
 
-        float volume = (100 - distance * multiplyer) * AudioManager.instance.musicVolume / 100;
-        if (volume <= 0.25f)
-            volume = 0.25f;
-        AudioManager.instance.musicSource.volume = volume;
+        if (AudioManager.instance)
+        {
+            float volume = (100 - distance * multiplyer) * AudioManager.instance.musicVolume / 100;
+            if (volume <= 0.25f)
+                volume = 0.25f;
+
+            AudioManager.instance.musicSource.volume = volume;
+        }
     }
 
     /// <summary>

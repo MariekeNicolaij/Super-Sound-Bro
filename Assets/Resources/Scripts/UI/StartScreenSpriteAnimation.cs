@@ -33,7 +33,6 @@ public class StartScreenSpriteAnimation : MonoBehaviour
             Respawn(go);
             go.transform.parent = transform;
 
-
             sprites.Add(go);
         }
     }
