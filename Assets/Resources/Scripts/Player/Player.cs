@@ -369,6 +369,10 @@ public class Player : MonoBehaviour
             { "Time", Mathf.RoundToInt(Time.timeSinceLevelLoad) }
         });
 
+        // Game over animations
+        GetComponent<SpriteRenderer>().enabled = false;
+        GetComponentInChildren<ParticleSystem>().Play();
+
         UIManager.instance.ToggleGameOverPanel(true);
         AudioManager.instance.PlaySound(SoundType.Death);
     }
